@@ -1,6 +1,7 @@
 package net.dankito.jpa.annotationreader;
 
 import net.dankito.jpa.annotationreader.reflection.AnnotationElementsReader;
+import net.dankito.jpa.annotationreader.reflection.IAnnotationElementsReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class JpaEntityConfigurationReader {
 
   protected JpaPropertyConfigurationReader propertyConfigurationReader = null;
 
-  protected AnnotationElementsReader annotationElementsReader = null;
+  protected IAnnotationElementsReader annotationElementsReader = null;
 
   protected ConfigRegistry configRegistry = null;
 
@@ -54,7 +55,7 @@ public class JpaEntityConfigurationReader {
     this(propertyConfigurationReader, new AnnotationElementsReader());
   }
 
-  public JpaEntityConfigurationReader(JpaPropertyConfigurationReader propertyConfigurationReader, AnnotationElementsReader annotationElementsReader) {
+  public JpaEntityConfigurationReader(JpaPropertyConfigurationReader propertyConfigurationReader, IAnnotationElementsReader annotationElementsReader) {
     this.propertyConfigurationReader = propertyConfigurationReader;
 
     this.annotationElementsReader = annotationElementsReader;
@@ -275,7 +276,7 @@ public class JpaEntityConfigurationReader {
 
   // TODO: try to remove static modifiers
 
-  public static String getEntityTableName(Class<?> entityClass, AnnotationElementsReader annotationElementsReader) throws SQLException {
+  public static String getEntityTableName(Class<?> entityClass, IAnnotationElementsReader annotationElementsReader) throws SQLException {
     if(entityClass.isAnnotationPresent(Table.class)) {
       Table tableAnnotation = entityClass.getAnnotation(Table.class);
       Map<String, Object> elements = annotationElementsReader.getElements(tableAnnotation);;

@@ -1,7 +1,7 @@
 package net.dankito.jpa.annotationreader;
 
 import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
-import net.dankito.jpa.annotationreader.reflection.AnnotationElementsReader;
+import net.dankito.jpa.annotationreader.reflection.IAnnotationElementsReader;
 import net.dankito.jpa.annotationreader.reflection.ReflectionHelper;
 import net.dankito.jpa.annotationreader.relationconfig.ManyToManyConfig;
 import net.dankito.jpa.annotationreader.relationconfig.OneToManyConfig;
@@ -53,7 +53,7 @@ public class JpaPropertyConfigurationReader {
   private final static Logger log = LoggerFactory.getLogger(JpaPropertyConfigurationReader.class);
 
 
-  protected AnnotationElementsReader annotationElementsReader = null;
+  protected IAnnotationElementsReader annotationElementsReader = null;
 
   private ConfigRegistry configRegistry;
 
@@ -947,7 +947,7 @@ public class JpaPropertyConfigurationReader {
   }
 
 
-  public void setAnnotationElementsReader(AnnotationElementsReader annotationElementsReader) {
+  public void setAnnotationElementsReader(IAnnotationElementsReader annotationElementsReader) {
     this.annotationElementsReader = annotationElementsReader;
   }
 
