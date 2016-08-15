@@ -30,8 +30,10 @@ public class OrderByConfig {
 
 	public String getColumnName() {
     if(OrderByColumnNotYetLoaded.equals(columnName)) {
-      if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn))
+      if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn)) {
         this.columnName = configRegistry.getPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn).getColumnName();
+        this.configRegistry = null; // ConfigRegistry is then not needed anymore -> we can release it
+      }
       // TODO: what to return if property is not found?
     }
 		return columnName;

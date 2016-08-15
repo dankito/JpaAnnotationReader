@@ -96,6 +96,18 @@ public class ConfigRegistry {
     return null;
   }
 
+  public JoinTableConfig[] getJoinTableConfigurations() {
+    List<JoinTableConfig> joinTableConfigs = new ArrayList<>();
+
+    for(Map<Class, JoinTableConfig> inverseSideToJoinTableConfigs : mapOwningSideClassToJoinTableConfig.values()) {
+      for(JoinTableConfig joinTable : inverseSideToJoinTableConfigs.values()) {
+        joinTableConfigs.add(joinTable);
+      }
+    }
+
+    return joinTableConfigs.toArray(new JoinTableConfig[joinTableConfigs.size()]);
+  }
+
 
   public boolean hasPropertyConfiguration(Class declaringClass, Property property) {
 //    return mapPropertyToPropertyConfig.containsKey(property);
