@@ -52,7 +52,6 @@ public class EntityConfig<T, ID> {
 	protected PropertyConfig idProperty;
   protected PropertyConfig versionProperty;
 
-	protected boolean foreignAutoCreate;
 	private Map<String, PropertyConfig> fieldNameMap;
 
   // @Table Annotation settings
@@ -321,13 +320,6 @@ public class EntityConfig<T, ID> {
 	public boolean isUpdatable() {
 		// to update we must have an id field and there must be more than just the id field
 		return (idProperty != null && propertyConfigs.size() > 1);
-	}
-
-	/**
-	 * Return true if one of the fields has {@link DatabaseField#foreignAutoCreate()} enabled.
-	 */
-	public boolean isForeignAutoCreate() {
-		return foreignAutoCreate;
 	}
 
   public boolean hasForeignCollections() {
