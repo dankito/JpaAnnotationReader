@@ -112,66 +112,6 @@ public class EntityConfig<T, ID> {
     setPropertyConfigs(propertyConfigs);
   }
 
-  // TODO: still needed?
-  protected void findSpecialColumns() throws SQLException {
-    // find the id field
-    PropertyConfig findIdPropertyConfig = null;
-    boolean foreignAutoCreate = false;
-//    List<PropertyConfig> joinColumns = new ArrayList<>();
-//    int foreignCollectionCount = 0;
-    int manyToManyFieldsCount = 0;
-
-    for (PropertyConfig propertyConfig : propertyConfigs) {
-      if (propertyConfig.isId() || propertyConfig.isGeneratedId() || propertyConfig.isGeneratedIdSequence()) {
-        if (findIdPropertyConfig != null) {
-          throw new SQLException("More than 1 idProperty configured for class " + entityClass + " ("
-              + findIdPropertyConfig + "," + propertyConfig + ")");
-        }
-        findIdPropertyConfig = propertyConfig;
-      }
-      if (propertyConfig.isForeignAutoCreate() || (propertyConfig.isOneToManyField() && propertyConfig.getOneToManyConfig().cascadePersist()) ||
-          (propertyConfig.isManyToManyField() && propertyConfig.getManyToManyConfig().cascadePersist())) {
-        foreignAutoCreate = true;
-      }
-      if (propertyConfig.isJoinColumn())
-//        joinColumns.add(propertyConfig);
-        addJoinColumn(propertyConfig);
-      if (propertyConfig.isForeignCollection()) {
-//        foreignCollectionCount++;
-        addForeignCollection(propertyConfig);
-      }
-      if (propertyConfig.isManyToManyField())
-//        manyToManyFieldsCount++;
-        addJoinTableProperty(propertyConfig);
-    }
-
-    // can be null if there is no id field
-    this.idProperty = findIdPropertyConfig;
-    this.foreignAutoCreate = foreignAutoCreate;
-//    this.joinColumns = joinColumns.toArray(new PropertyConfig[joinColumns.size()]);
-
-//    if (foreignCollectionCount == 0) {
-//      this.foreignCollections = NO_FOREIGN_COLLECTIONS;
-//      this.joinTableProperties = NO_MANY_TO_MANY_FIELDS;
-//    } else {
-//      this.foreignCollections = new PropertyConfig[foreignCollectionCount];
-//      this.joinTableProperties = new PropertyConfig[manyToManyFieldsCount];
-//      foreignCollectionCount = 0;
-//      manyToManyFieldsCount = 0;
-
-//      for (PropertyConfig propertyConfig : propertyConfigs) {
-//        if (propertyConfig.isForeignCollection()) {
-//          this.foreignCollections[foreignCollectionCount] = propertyConfig;
-//          foreignCollectionCount++;
-//        }
-//        if (propertyConfig.isManyToManyField()) {
-//          this.joinTableProperties[manyToManyFieldsCount] = propertyConfig;
-//          manyToManyFieldsCount++;
-//        }
-//      }
-//    }
-  }
-
   /**
 	 * Return the class associated with this object-info.
 	 */
@@ -306,8 +246,6 @@ public class EntityConfig<T, ID> {
     for(PropertyConfig propertyConfig : propertyConfigs) {
       addProperty(propertyConfig);
     }
-
-    try { findSpecialColumns(); } catch(Exception ex) { }  // TODO: remove
   }
 
   public boolean addProperty(PropertyConfig propertyConfig) throws SQLException {
