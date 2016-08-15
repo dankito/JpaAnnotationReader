@@ -15,7 +15,7 @@ import java.util.HashMap;
  *
  * Created by ganymed on 26/08/15.
  */
-public class AnnotationElementsReader {
+public class AnnotationElementsReader implements IAnnotationElementsReader {
 
   protected static Boolean isOnAndroid = null;
 
@@ -33,6 +33,7 @@ public class AnnotationElementsReader {
   }
 
 
+  @Override
   public HashMap<String, Object> getElements(Annotation annotation) throws SQLException {
     if(isOnAndroid())
       return resolveMembersTheAndroidWay(annotation);
