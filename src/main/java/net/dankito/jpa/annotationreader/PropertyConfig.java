@@ -1,5 +1,6 @@
 package net.dankito.jpa.annotationreader;
 
+import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
 import net.dankito.jpa.annotationreader.relationconfig.ManyToManyConfig;
 import net.dankito.jpa.annotationreader.relationconfig.OneToManyConfig;
 import net.dankito.jpa.annotationreader.relationconfig.OneToOneConfig;
@@ -81,7 +82,7 @@ public class PropertyConfig {
   protected boolean isOwningSide = false;
   protected boolean isInverseSide = false;
   protected boolean isJoinColumn = false;
-//  protected JoinTableConfig joinTable = null;
+  protected JoinTableConfig joinTable = null;
   protected boolean isBidirectional = false;
   protected boolean isForeignAutoCreate = false; // TODO: try to remove this value or implement other logic - but right now it's needed!
 
@@ -281,15 +282,15 @@ public class PropertyConfig {
     this.entityConfig.addJoinColumn(this);
   }
 
-//  public JoinTableConfig getJoinTable() {
-//    if(joinTable == null && isInverseSide && getTargetPropertyConfig() != null)
-//      this.joinTable = getTargetPropertyConfig().getJoinTable();
-//    return joinTable;
-//  }
-//
-//  public void setJoinTable(JoinTableConfig joinTable) {
-//    this.joinTable = joinTable;
-//  }
+  public JoinTableConfig getJoinTable() {
+    if(joinTable == null && isInverseSide && getTargetPropertyConfig() != null)
+      this.joinTable = getTargetPropertyConfig().getJoinTable();
+    return joinTable;
+  }
+
+  public void setJoinTable(JoinTableConfig joinTable) {
+    this.joinTable = joinTable;
+  }
 
   public boolean isBidirectional() {
     return isBidirectional;

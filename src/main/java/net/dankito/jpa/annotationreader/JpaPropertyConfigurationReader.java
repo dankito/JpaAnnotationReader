@@ -1,5 +1,6 @@
 package net.dankito.jpa.annotationreader;
 
+import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
 import net.dankito.jpa.annotationreader.reflection.AnnotationElementsReader;
 import net.dankito.jpa.annotationreader.reflection.ReflectionHelper;
 import net.dankito.jpa.annotationreader.relationconfig.ManyToManyConfig;
@@ -31,6 +32,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -734,60 +736,56 @@ public class JpaPropertyConfigurationReader {
     readOrderByAnnotation(property, propertyConfig, targetEntityClass);
   }
 
-  protected void readJoinTableAnnotation(Property owningSideProperty, PropertyConfig owningSidePropertyConfig, Class targetEntityClass, Property inverseSideProperty) throws
-      SQLException {
+  protected JoinTableConfig readJoinTableAnnotation(Property owningSideProperty, PropertyConfig owningSidePropertyConfig, Class targetEntityClass, Property inverseSideProperty) throws SQLException {
+    String owningSideEntityName = owningSidePropertyConfig.getEntityConfig().getTableName();
+    String inverseSideEntityName = JpaEntityConfigurationReader.getEntityTableName(targetEntityClass);
+    String joinTableName = owningSideEntityName + "_" + inverseSideEntityName; // TODO: check if table name is unique
+    String owningSideJoinColumnNameStub = owningSidePropertyConfig.getEntityConfig().getTableName() + "_"; // if applied id column name has to be appended by calling (expensive) getIdColumnName(owningSidePropertyConfig.getEntityConfig())
+    String inverseSideJoinColumnNameStub = owningSidePropertyConfig.getColumnName() + "_"; // if applied id column name has to be appended by calling (expensive) getIdColumnName(targetEntityClass)
 
+    if(isAnnotationPresent(owningSideProperty, JoinTable.class) == false) {
+      owningSidePropertyConfig.setColumnName(owningSideJoinColumnNameStub + getIdColumnName(owningSidePropertyConfig.getEntityConfig()));
+      inverseSideJoinColumnNameStub +=  getIdColumnName(targetEntityClass);
+      JoinTableConfig joinTable = new JoinTableConfig(joinTableName, owningSidePropertyConfig, targetEntityClass, inverseSideJoinColumnNameStub, inverseSideProperty);
+      owningSidePropertyConfig.setJoinTable(joinTable);
+      return joinTable;
+    }
+    else {
+      JoinTable joinTableAnnotation = getPropertyAnnotation(owningSideProperty, JoinTable.class);
+      Map<String, Object> elements = annotationElementsReader.getElements(joinTableAnnotation);
+
+      String name = (String)elements.get("name");
+      if(StringHelper.isNotNullOrEmpty(name))
+        joinTableName = name;
+
+      JoinColumn[] joinColumns = (JoinColumn[])elements.get("joinColumns");
+      if(joinColumns.length > 1)
+        throw new SQLException("Sorry for the inconvenience, but @JoinTable with more than one @JoinColumn value as on property " + owningSideProperty + " is not supported");
+      else if(joinColumns.length == 1)
+        readJoinColumnConfiguration(owningSideProperty, owningSidePropertyConfig, joinColumns[0]);
+      else
+        owningSidePropertyConfig.setColumnName(getJoinColumnName(owningSideProperty, owningSidePropertyConfig.getTargetEntityClass()));
+
+      JoinColumn[] inverseJoinColumns = (JoinColumn[])elements.get("inverseJoinColumns");
+      if(inverseJoinColumns.length > 1)
+        throw new SQLException("Sorry for the inconvenience, but @JoinTable with more than one @InverseJoinColumn value as on property " + owningSideProperty + " is not supported");
+      // TODO:
+      else if(inverseJoinColumns.length == 1)
+        inverseSideJoinColumnNameStub += inverseJoinColumns[0].name(); // TODO: remove name() method invocation on Annotation as well
+      else
+        inverseSideJoinColumnNameStub += getIdColumnName(targetEntityClass);
+
+      JoinTableConfig joinTable = new JoinTableConfig(joinTableName, owningSidePropertyConfig, targetEntityClass, inverseSideJoinColumnNameStub, inverseSideProperty);
+      owningSidePropertyConfig.setJoinTable(joinTable);
+
+      if(inverseJoinColumns.length == 1)
+        readJoinColumnConfiguration(inverseSideProperty, joinTable.getInverseSideJoinColumn(), inverseJoinColumns[0]);
+
+      // TODO: read other JoinTable settings
+
+      return joinTable;
+    }
   }
-//  protected JoinTableConfig readJoinTableAnnotation(Property owningSideProperty, PropertyConfig owningSidePropertyConfig, Class targetEntityClass, Property inverseSideProperty) throws SQLException {
-//    String owningSideEntityName = owningSidePropertyConfig.getEntityConfig().getTableName();
-//    String inverseSideEntityName = JpaEntityConfigurationReader.getEntityTableName(targetEntityClass);
-//    String joinTableName = owningSideEntityName + "_" + inverseSideEntityName; // TODO: check if table name is unique
-//    String owningSideJoinColumnNameStub = owningSidePropertyConfig.getEntityConfig().getTableName() + "_"; // if applied id column name has to be appended by calling (expensive) getIdColumnName(owningSidePropertyConfig.getEntityConfig())
-//    String inverseSideJoinColumnNameStub = owningSidePropertyConfig.getColumnName() + "_"; // if applied id column name has to be appended by calling (expensive) getIdColumnName(targetEntityClass)
-//
-//    if(isAnnotationPresent(owningSideProperty, JoinTable.class) == false) {
-//      owningSidePropertyConfig.setColumnName(owningSideJoinColumnNameStub + getIdColumnName(owningSidePropertyConfig.getEntityConfig()));
-//      inverseSideJoinColumnNameStub +=  getIdColumnName(targetEntityClass);
-//      JoinTableConfig joinTable = new JoinTableConfig(joinTableName, owningSidePropertyConfig, targetEntityClass, inverseSideJoinColumnNameStub, inverseSideProperty);
-//      owningSidePropertyConfig.setJoinTable(joinTable);
-//      return joinTable;
-//    }
-//    else {
-//      JoinTable joinTableAnnotation = getPropertyAnnotation(owningSideProperty, JoinTable.class);
-//      Map<String, Object> elements = annotationElementsReader.getElements(joinTableAnnotation);
-//
-//      String name = (String)elements.get("name");
-//      if(StringHelper.isNotNullOrEmpty(name))
-//        joinTableName = name;
-//
-//      JoinColumn[] joinColumns = (JoinColumn[])elements.get("joinColumns");
-//      if(joinColumns.length > 1)
-//        throw new SQLException("Sorry for the inconvenience, but @JoinTable with more than one @JoinColumn value as on property " + owningSideProperty + " is not supported");
-//      else if(joinColumns.length == 1)
-//        readJoinColumnConfiguration(owningSideProperty, owningSidePropertyConfig, joinColumns[0]);
-//      else
-//        owningSidePropertyConfig.setColumnName(getJoinColumnName(owningSideProperty, owningSidePropertyConfig.getTargetEntityClass()));
-//
-//      JoinColumn[] inverseJoinColumns = (JoinColumn[])elements.get("inverseJoinColumns");
-//      if(inverseJoinColumns.length > 1)
-//        throw new SQLException("Sorry for the inconvenience, but @JoinTable with more than one @InverseJoinColumn value as on property " + owningSideProperty + " is not supported");
-//      // TODO:
-//      else if(inverseJoinColumns.length == 1)
-//        inverseSideJoinColumnNameStub += inverseJoinColumns[0].name(); // TODO: remove name() method invocation on Annotation as well
-//      else
-//        inverseSideJoinColumnNameStub += getIdColumnName(targetEntityClass);
-//
-//      JoinTableConfig joinTable = new JoinTableConfig(joinTableName, owningSidePropertyConfig, targetEntityClass, inverseSideJoinColumnNameStub, inverseSideProperty);
-//      owningSidePropertyConfig.setJoinTable(joinTable);
-//
-//      if(inverseJoinColumns.length == 1)
-//        readJoinColumnConfiguration(inverseSideProperty, joinTable.getInverseSideJoinColumn(), inverseJoinColumns[0]);
-//
-//      // TODO: read other JoinTable settings
-//
-//      return joinTable;
-//    }
-//  }
 
   protected String getIdColumnName(EntityConfig entity) {
     if(entity.getIdProperty() != null)

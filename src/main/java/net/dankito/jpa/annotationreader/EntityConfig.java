@@ -107,14 +107,14 @@ public class EntityConfig<T, ID> {
   }
 
   // for JoinTables
-  protected EntityConfig(String tableName/*, PropertyConfig owningSideProperty*/) throws SQLException {
+  protected EntityConfig(String tableName, PropertyConfig... propertyConfigs) throws SQLException {
     entityClass = null;
     setEntityName(tableName);
     setTableName(tableName);
 
-//    addProperty(owningSideProperty);
-
     constructor = null;
+
+    setPropertyConfigs(propertyConfigs);
   }
 
   // TODO: still needed?
@@ -308,8 +308,9 @@ public class EntityConfig<T, ID> {
     this.propertyConfigs.clear();
     this.propertyConfigsColumnNames.clear();
 
-    for(PropertyConfig propertyConfig : propertyConfigs)
+    for(PropertyConfig propertyConfig : propertyConfigs) {
       addProperty(propertyConfig);
+    }
 
     try { findSpecialColumns(); } catch(Exception ex) { }  // TODO: remove
   }
@@ -401,6 +402,11 @@ public class EntityConfig<T, ID> {
     return getForeignCollections().add(foreignCollectionProperty);
   }
 
+  public boolean isJoinTable() {
+    return false;
+  }
+
+  // TODO: joinColumns and joinTableProperties still needed?
   public boolean hasJoinColumns() {
     return joinColumns != null && joinColumns.size() > 0;
   }

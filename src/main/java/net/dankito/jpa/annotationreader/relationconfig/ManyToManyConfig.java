@@ -3,6 +3,8 @@ package net.dankito.jpa.annotationreader.relationconfig;
 import net.dankito.jpa.annotationreader.EntityConfig;
 import net.dankito.jpa.annotationreader.Property;
 import net.dankito.jpa.annotationreader.PropertyConfig;
+import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
+import net.dankito.jpa.annotationreader.jointable.JoinTableFieldType;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -29,10 +31,10 @@ public class ManyToManyConfig extends AssociationConfig {
   protected String joinTableOwningSideColumnName = null;
   protected String joinTableInverseSideColumnName = null;
 
-//  protected JoinTableFieldType idFieldType = null;
-//  protected JoinTableFieldType owningSideFieldType = null;
-//  protected JoinTableFieldType inverseSideFieldType = null;
-//  protected JoinTableFieldType[] fieldTypes = null;
+  protected JoinTableFieldType idFieldType = null;
+  protected JoinTableFieldType owningSideFieldType = null;
+  protected JoinTableFieldType inverseSideFieldType = null;
+  protected JoinTableFieldType[] fieldTypes = null;
 
   protected EntityConfig entityConfig = null;
 
@@ -158,39 +160,35 @@ public class ManyToManyConfig extends AssociationConfig {
       joinTableInverseSideColumnName = inverseSideClass.getSimpleName().toLowerCase() + "_id";
   }
 
-//  public JoinTableFieldType getIdFieldType() throws SQLException {
-//    if(idFieldType == null)
-//      idFieldType = new JoinTableFieldType(this, getJoinTableIdColumnName(), Long.class, true, true);
-//    return idFieldType;
-//  }
-//
-//  public JoinTableFieldType getOwningSideFieldType() throws SQLException {
-//    if(owningSideFieldType == null)
-//      owningSideFieldType = new JoinTableFieldType(this, getJoinTableOwningSideColumnName(), Long.class);
-//    return owningSideFieldType;
-//  }
-//
-//  public JoinTableFieldType getInverseSideFieldType() throws SQLException {
-//    if(inverseSideFieldType == null)
-//      inverseSideFieldType = new JoinTableFieldType(this, getJoinTableInverseSideColumnName(), Long.class);
-//    return inverseSideFieldType;
-//  }
-//
-//  public PropertyConfig[] getFieldTypes() throws SQLException {
-//    if(fieldTypes == null)
-//      fieldTypes = new JoinTableFieldType[] { getIdFieldType(), getOwningSideFieldType(), getInverseSideFieldType() };
-//    return fieldTypes;
-//  }
-//
-//  public EntityConfig getEntityConfig() throws SQLException {
-//    if(entityConfig == null)
-//      entityConfig = new JoinTableConfig(this);
-//    return entityConfig;
-//  }
+  public JoinTableFieldType getIdFieldType() throws SQLException {
+    if(idFieldType == null)
+      idFieldType = new JoinTableFieldType(this, getJoinTableIdColumnName(), Long.class, true, true);
+    return idFieldType;
+  }
 
-//  public void setTableInfo(TableInfo tableInfo) {
-//    this.tableInfo = tableInfo;
-//  }
+  public JoinTableFieldType getOwningSideFieldType() throws SQLException {
+    if(owningSideFieldType == null)
+      owningSideFieldType = new JoinTableFieldType(this, owningSideProperty, getJoinTableOwningSideColumnName(), Long.class);
+    return owningSideFieldType;
+  }
+
+  public JoinTableFieldType getInverseSideFieldType() throws SQLException {
+    if(inverseSideFieldType == null)
+      inverseSideFieldType = new JoinTableFieldType(this, inverseSideProperty, getJoinTableInverseSideColumnName(), Long.class);
+    return inverseSideFieldType;
+  }
+
+  public PropertyConfig[] getFieldTypes() throws SQLException {
+    if(fieldTypes == null)
+      fieldTypes = new JoinTableFieldType[] { getIdFieldType(), getOwningSideFieldType(), getInverseSideFieldType() };
+    return fieldTypes;
+  }
+
+  public EntityConfig getEntityConfig() throws SQLException {
+    if(entityConfig == null)
+      entityConfig = new JoinTableConfig(this);
+    return entityConfig;
+  }
 
 
   @Override
