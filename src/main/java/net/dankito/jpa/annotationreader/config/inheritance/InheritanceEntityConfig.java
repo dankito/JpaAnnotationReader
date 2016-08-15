@@ -1,7 +1,7 @@
-package net.dankito.jpa.annotationreader.inheritance;
+package net.dankito.jpa.annotationreader.config.inheritance;
 
-import net.dankito.jpa.annotationreader.EntityConfig;
-import net.dankito.jpa.annotationreader.PropertyConfig;
+import net.dankito.jpa.annotationreader.config.EntityConfig;
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
 import net.dankito.jpa.annotationreader.util.StringHelper;
 
 import java.sql.SQLException;

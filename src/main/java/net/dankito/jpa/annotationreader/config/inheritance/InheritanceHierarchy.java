@@ -1,4 +1,4 @@
-package net.dankito.jpa.annotationreader.inheritance;
+package net.dankito.jpa.annotationreader.config.inheritance;
 
 import java.util.LinkedList;
 import java.util.List;

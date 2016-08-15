@@ -1,11 +1,8 @@
-package net.dankito.jpa.annotationreader.inheritance;
+package net.dankito.jpa.annotationreader.config.inheritance;
 
 
-import net.dankito.jpa.annotationreader.DataType;
-import net.dankito.jpa.annotationreader.PropertyConfig;
-
-import java.lang.reflect.Field;
-import java.sql.SQLException;
+import net.dankito.jpa.annotationreader.config.DataType;
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
 
 import javax.persistence.DiscriminatorType;
 

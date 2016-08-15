@@ -1,8 +1,9 @@
 package net.dankito.jpa.annotationreader;
 
-import net.dankito.jpa.annotationreader.inheritance.InheritanceEntityConfig;
-import net.dankito.jpa.annotationreader.inheritance.JoinedEntityConfig;
-import net.dankito.jpa.annotationreader.inheritance.SingleTableEntityConfig;
+import net.dankito.jpa.annotationreader.config.EntityConfig;
+import net.dankito.jpa.annotationreader.config.inheritance.InheritanceEntityConfig;
+import net.dankito.jpa.annotationreader.config.inheritance.JoinedEntityConfig;
+import net.dankito.jpa.annotationreader.config.inheritance.SingleTableEntityConfig;
 import net.dankito.jpa.annotationreader.reflection.AnnotationElementsReader;
 import net.dankito.jpa.annotationreader.reflection.IAnnotationElementsReader;
 import net.dankito.jpa.annotationreader.util.ConfigRegistry;

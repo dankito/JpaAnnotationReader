@@ -1,4 +1,4 @@
-package net.dankito.jpa.annotationreader;
+package net.dankito.jpa.annotationreader.config;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

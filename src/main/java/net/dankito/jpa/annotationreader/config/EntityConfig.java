@@ -1,4 +1,4 @@
-package net.dankito.jpa.annotationreader;
+package net.dankito.jpa.annotationreader.config;
 
 import net.dankito.jpa.annotationreader.reflection.ReflectionHelper;
 
@@ -16,13 +16,6 @@ import java.util.Map;
 import javax.persistence.AccessType;
 import javax.persistence.Index;
 import javax.persistence.InheritanceType;
-import javax.persistence.PostLoad;
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
 import javax.persistence.UniqueConstraint;
 
 /**

@@ -1,4 +1,4 @@
-package net.dankito.jpa.annotationreader;
+package net.dankito.jpa.annotationreader.config;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

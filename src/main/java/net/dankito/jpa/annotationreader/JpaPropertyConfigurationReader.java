@@ -1,11 +1,16 @@
 package net.dankito.jpa.annotationreader;
 
-import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
+import net.dankito.jpa.annotationreader.config.DataType;
+import net.dankito.jpa.annotationreader.config.EntityConfig;
+import net.dankito.jpa.annotationreader.config.OrderByConfig;
+import net.dankito.jpa.annotationreader.config.Property;
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
+import net.dankito.jpa.annotationreader.config.jointable.JoinTableConfig;
 import net.dankito.jpa.annotationreader.reflection.IAnnotationElementsReader;
 import net.dankito.jpa.annotationreader.reflection.ReflectionHelper;
-import net.dankito.jpa.annotationreader.relationconfig.ManyToManyConfig;
-import net.dankito.jpa.annotationreader.relationconfig.OneToManyConfig;
-import net.dankito.jpa.annotationreader.relationconfig.OneToOneConfig;
+import net.dankito.jpa.annotationreader.config.relation.ManyToManyConfig;
+import net.dankito.jpa.annotationreader.config.relation.OneToManyConfig;
+import net.dankito.jpa.annotationreader.config.relation.OneToOneConfig;
 import net.dankito.jpa.annotationreader.util.ConfigRegistry;
 import net.dankito.jpa.annotationreader.util.StringHelper;
 

@@ -1,9 +1,9 @@
-package net.dankito.jpa.annotationreader;
+package net.dankito.jpa.annotationreader.config;
 
-import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
-import net.dankito.jpa.annotationreader.relationconfig.ManyToManyConfig;
-import net.dankito.jpa.annotationreader.relationconfig.OneToManyConfig;
-import net.dankito.jpa.annotationreader.relationconfig.OneToOneConfig;
+import net.dankito.jpa.annotationreader.config.jointable.JoinTableConfig;
+import net.dankito.jpa.annotationreader.config.relation.ManyToManyConfig;
+import net.dankito.jpa.annotationreader.config.relation.OneToManyConfig;
+import net.dankito.jpa.annotationreader.config.relation.OneToOneConfig;
 import net.dankito.jpa.annotationreader.util.ConfigRegistry;
 
 import org.slf4j.Logger;

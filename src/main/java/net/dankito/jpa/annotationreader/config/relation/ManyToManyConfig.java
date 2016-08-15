@@ -1,10 +1,9 @@
-package net.dankito.jpa.annotationreader.relationconfig;
+package net.dankito.jpa.annotationreader.config.relation;
 
-import net.dankito.jpa.annotationreader.EntityConfig;
-import net.dankito.jpa.annotationreader.Property;
-import net.dankito.jpa.annotationreader.PropertyConfig;
-import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
-import net.dankito.jpa.annotationreader.jointable.JoinTableFieldType;
+import net.dankito.jpa.annotationreader.config.Property;
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
+import net.dankito.jpa.annotationreader.config.jointable.JoinTableConfig;
+import net.dankito.jpa.annotationreader.config.jointable.JoinTableFieldType;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;

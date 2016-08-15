@@ -1,4 +1,4 @@
-package net.dankito.jpa.annotationreader.relationconfig;
+package net.dankito.jpa.annotationreader.config.relation;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;

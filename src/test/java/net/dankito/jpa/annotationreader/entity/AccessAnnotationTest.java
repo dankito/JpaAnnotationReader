@@ -1,7 +1,7 @@
 package net.dankito.jpa.annotationreader.entity;
 
 
-import net.dankito.jpa.annotationreader.EntityConfig;
+import net.dankito.jpa.annotationreader.config.EntityConfig;
 import net.dankito.jpa.annotationreader.JpaConfigurationReaderTestBase;
 
 import org.junit.Assert;

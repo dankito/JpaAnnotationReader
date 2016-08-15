@@ -1,8 +1,7 @@
 package net.dankito.jpa.annotationreader.reflection;
 
 
-import net.dankito.jpa.annotationreader.Property;
-import net.dankito.jpa.annotationreader.reflection.ReflectionHelper;
+import net.dankito.jpa.annotationreader.config.Property;
 import net.dankito.jpa.annotationreader.testmodel.Category;
 import net.dankito.jpa.annotationreader.testmodel.ReferenceBase;
 import net.dankito.jpa.annotationreader.testmodel.SeriesTitle;

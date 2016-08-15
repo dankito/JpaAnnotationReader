@@ -1,7 +1,7 @@
 package net.dankito.jpa.annotationreader.reflection;
 
 import net.dankito.jpa.annotationreader.JpaEntityConfigurationReader;
-import net.dankito.jpa.annotationreader.Property;
+import net.dankito.jpa.annotationreader.config.Property;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,9 +1,9 @@
-package net.dankito.jpa.annotationreader.inheritance;
+package net.dankito.jpa.annotationreader.config.inheritance;
 
 
-import net.dankito.jpa.annotationreader.DataType;
-import net.dankito.jpa.annotationreader.EntityConfig;
-import net.dankito.jpa.annotationreader.PropertyConfig;
+import net.dankito.jpa.annotationreader.config.DataType;
+import net.dankito.jpa.annotationreader.config.EntityConfig;
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
 
 
 public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {

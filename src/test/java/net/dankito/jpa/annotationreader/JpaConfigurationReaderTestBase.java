@@ -1,5 +1,7 @@
 package net.dankito.jpa.annotationreader;
 
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

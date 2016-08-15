@@ -1,7 +1,7 @@
-package net.dankito.jpa.annotationreader.relationconfig;
+package net.dankito.jpa.annotationreader.config.relation;
 
-import net.dankito.jpa.annotationreader.Property;
-import net.dankito.jpa.annotationreader.PropertyConfig;
+import net.dankito.jpa.annotationreader.config.Property;
+import net.dankito.jpa.annotationreader.config.PropertyConfig;
 
 import java.lang.reflect.Field;
 
