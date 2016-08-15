@@ -115,8 +115,7 @@ public class PropertyConfig {
     this.fieldGetMethod = property.getGetMethod();
     this.fieldSetMethod = property.getSetMethod();
 
-    this.type = property.getType();
-    this.typeIsACollection = Collection.class.isAssignableFrom(property.getType());
+    assignType(property.getType());
 
     this.fieldName = property.getFieldName();
     setColumnName(this.fieldName);
@@ -141,6 +140,11 @@ public class PropertyConfig {
 
   public Class getType() {
     return type;
+  }
+
+  protected void assignType(Class type) {
+    this.type = type;
+    this.typeIsACollection = Collection.class.isAssignableFrom(type);
   }
 
   public boolean isTypeIsACollection() {

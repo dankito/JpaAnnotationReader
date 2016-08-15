@@ -39,36 +39,55 @@ public class ManyToManyConfig extends AssociationConfig {
   protected EntityConfig entityConfig = null;
 
 
-  public ManyToManyConfig(Field owningSideField, Field inverseSideField, FetchType fetch, CascadeType[] cascade) {
-    this(owningSideField.getDeclaringClass(), owningSideField, inverseSideField.getDeclaringClass(), inverseSideField, fetch, cascade);
+  public ManyToManyConfig(Property owningSideProperty, Class inverseSideClass, FetchType fetch, CascadeType[] cascade) throws SQLException {
+    this(owningSideProperty, null, inverseSideClass, fetch, cascade);
   }
 
-  public ManyToManyConfig(Class owningSideClass, Field owningSideField, Class inverseSideClass, Field inverseSideField, FetchType fetch, CascadeType[] cascade) {
+  public ManyToManyConfig(Property owningSideProperty, Property inverseSideProperty, FetchType fetch, CascadeType[] cascade) throws SQLException {
+    this(owningSideProperty, inverseSideProperty, inverseSideProperty.getDeclaringClass(), fetch, cascade);
+  }
+
+  protected ManyToManyConfig(Property owningSideProperty, Property inverseSideProperty, Class inverseSideClass, FetchType fetch,
+                             CascadeType[] cascade) throws SQLException {
     super(fetch, cascade, true);
 
-    this.owningSideClass = owningSideClass;
-    this.owningSideField = owningSideField;
+    setOwningSideMembers(owningSideProperty);
+
+    setInverseSideMembers(inverseSideProperty, inverseSideClass);
+
+    createFieldTypes();
+
+    this.isBidirectional = inverseSideProperty != null;
+
+    this.entityConfig = new JoinTableConfig(this);
+
+    determineJoinTableSettings();
+  }
+
+  private void setOwningSideMembers(Property owningSideProperty) {
+    this.owningSideProperty = owningSideProperty;
+
+    this.owningSideClass = owningSideProperty.getDeclaringClass();
+    this.owningSideField = owningSideProperty.getField();
+  }
+
+  private void setInverseSideMembers(Property inverseSideProperty, Class inverseSideClass) {
     this.inverseSideClass = inverseSideClass;
-    this.inverseSideField = inverseSideField;
 
-    this.isBidirectional = true;
+    if(inverseSideProperty != null) {
+      this.inverseSideProperty = inverseSideProperty;
+      this.inverseSideField = inverseSideProperty.getField();
+    }
   }
 
-  public ManyToManyConfig(Property owningSideProperty, Class inverseSideClass, FetchType fetch, CascadeType[] cascade) {
-    this(owningSideProperty.getDeclaringClass(), owningSideProperty.getField(), inverseSideClass, null, fetch, cascade);
+  private void createFieldTypes() throws SQLException {
+    this.idFieldType = new JoinTableFieldType(this, getJoinTableIdColumnName(), Long.class, true, true);
 
-    this.owningSideProperty = owningSideProperty;
+    this.owningSideFieldType = new JoinTableFieldType(this, getJoinTableOwningSideColumnName(), Long.class);
 
-    this.isBidirectional = false;
-  }
+    this.inverseSideFieldType = new JoinTableFieldType(this, getJoinTableInverseSideColumnName(), Long.class);
 
-  public ManyToManyConfig(Property owningSideProperty, Property inverseSideProperty, FetchType fetch, CascadeType[] cascade) {
-    this(owningSideProperty.getDeclaringClass(), owningSideProperty.getField(), inverseSideProperty.getDeclaringClass(), inverseSideProperty.getField(), fetch, cascade);
-
-    this.owningSideProperty = owningSideProperty;
-    this.inverseSideProperty = inverseSideProperty;
-
-    this.isBidirectional = true;
+    this.fieldTypes = new JoinTableFieldType[] { getIdFieldType(), getOwningSideFieldType(), getInverseSideFieldType() };
   }
 
 
@@ -118,9 +137,6 @@ public class ManyToManyConfig extends AssociationConfig {
   }
 
   public String getJoinTableName() {
-    if(joinTableName == null) {
-      determineJoinTableSettings();
-    }
     return joinTableName;
   }
 
@@ -129,16 +145,10 @@ public class ManyToManyConfig extends AssociationConfig {
   }
 
   public String getJoinTableOwningSideColumnName() {
-    if(joinTableOwningSideColumnName == null)
-      determineJoinTableSettings();
-
     return joinTableOwningSideColumnName;
   }
 
   public String getJoinTableInverseSideColumnName() {
-    if(joinTableInverseSideColumnName == null)
-      determineJoinTableSettings();
-
     return joinTableInverseSideColumnName;
   }
 
@@ -160,33 +170,23 @@ public class ManyToManyConfig extends AssociationConfig {
       joinTableInverseSideColumnName = inverseSideClass.getSimpleName().toLowerCase() + "_id";
   }
 
-  public JoinTableFieldType getIdFieldType() throws SQLException {
-    if(idFieldType == null)
-      idFieldType = new JoinTableFieldType(this, getJoinTableIdColumnName(), Long.class, true, true);
+  public JoinTableFieldType getIdFieldType() {
     return idFieldType;
   }
 
   public JoinTableFieldType getOwningSideFieldType() throws SQLException {
-    if(owningSideFieldType == null)
-      owningSideFieldType = new JoinTableFieldType(this, owningSideProperty, getJoinTableOwningSideColumnName(), Long.class);
     return owningSideFieldType;
   }
 
   public JoinTableFieldType getInverseSideFieldType() throws SQLException {
-    if(inverseSideFieldType == null)
-      inverseSideFieldType = new JoinTableFieldType(this, inverseSideProperty, getJoinTableInverseSideColumnName(), Long.class);
     return inverseSideFieldType;
   }
 
   public PropertyConfig[] getFieldTypes() throws SQLException {
-    if(fieldTypes == null)
-      fieldTypes = new JoinTableFieldType[] { getIdFieldType(), getOwningSideFieldType(), getInverseSideFieldType() };
     return fieldTypes;
   }
 
   public EntityConfig getEntityConfig() throws SQLException {
-    if(entityConfig == null)
-      entityConfig = new JoinTableConfig(this);
     return entityConfig;
   }
 
