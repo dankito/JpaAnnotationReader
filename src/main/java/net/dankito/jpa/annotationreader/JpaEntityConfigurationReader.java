@@ -1,5 +1,8 @@
 package net.dankito.jpa.annotationreader;
 
+import net.dankito.jpa.annotationreader.inheritance.InheritanceEntityConfig;
+import net.dankito.jpa.annotationreader.inheritance.JoinedEntityConfig;
+import net.dankito.jpa.annotationreader.inheritance.SingleTableEntityConfig;
 import net.dankito.jpa.annotationreader.reflection.AnnotationElementsReader;
 import net.dankito.jpa.annotationreader.reflection.IAnnotationElementsReader;
 
@@ -128,11 +131,10 @@ public class JpaEntityConfigurationReader {
   protected <T, ID> EntityConfig<T, ID> getCachedOrCreateNewEntityConfig(Class entityClass, List<EntityConfig> currentInheritanceTypeSubEntities) throws SQLException {
     if(configRegistry.hasEntityConfiguration(entityClass)) {
       EntityConfig entityConfig = configRegistry.getEntityConfiguration(entityClass);
-      // TODO: re-implement
-//      if(entityConfig instanceof InheritanceEntityConfig) {
-//        ((InheritanceEntityConfig) entityConfig).addInheritanceLevelSubEntities(currentInheritanceTypeSubEntities);
-//        currentInheritanceTypeSubEntities.clear();
-//      }
+      if(entityConfig instanceof InheritanceEntityConfig) {
+        ((InheritanceEntityConfig) entityConfig).addInheritanceLevelSubEntities(currentInheritanceTypeSubEntities);
+        currentInheritanceTypeSubEntities.clear();
+      }
 
       return entityConfig;
     }
@@ -146,8 +148,8 @@ public class JpaEntityConfigurationReader {
 
     if(inheritanceStrategy == null)
       entityConfig = new EntityConfig<T, ID>(entityClass);
-//    else
-//      entityConfig = createInheritanceEntityConfig(entityClass, inheritanceStrategy, currentInheritanceTypeSubEntities);
+    else
+      entityConfig = createInheritanceEntityConfig(entityClass, inheritanceStrategy, currentInheritanceTypeSubEntities);
 
     configRegistry.registerEntityConfiguration(entityClass, entityConfig);
 
@@ -158,32 +160,32 @@ public class JpaEntityConfigurationReader {
     return entityConfig;
   }
 
-//  protected InheritanceEntityConfig createInheritanceEntityConfig(Class<?> dataClass, InheritanceType inheritanceStrategy, List<EntityConfig> currentInheritanceTypeSubclasses) throws SQLException {
-//
-//
-//    switch (inheritanceStrategy) {
-//      case SINGLE_TABLE:
-//        return createSingleTableTableInfoForClass(dataClass, currentInheritanceTypeSubclasses);
-//      case JOINED:
-//        return createJoinedTableInfoForClass(dataClass, currentInheritanceTypeSubclasses);
-//      // TODO: implement TABLE_PER_CLASS (or throw at least an Exception that it's currently not supported
-//    }
-//
-////    return getAndMayCreateTableInfoForClass(dataClass, connectionSource); // produces a Stack Overflow
-//    return null;
-//  }
-//
-//  public SingleTableEntityConfig createSingleTableTableInfoForClass(Class tableClass, List<EntityConfig> subclasses) throws SQLException {
-//    SingleTableEntityConfig singleTableEntityConfig = new SingleTableEntityConfig(tableClass, subclasses);
-//
-//    return singleTableEntityConfig;
-//  }
-//
-//  public JoinedEntityConfig createJoinedTableInfoForClass(Class tableClass, List<EntityConfig> subclasses) throws SQLException {
-//    JoinedEntityConfig joinedEntityConfig = new JoinedEntityConfig(tableClass, subclasses);
-//
-//    return joinedEntityConfig;
-//  }
+  protected InheritanceEntityConfig createInheritanceEntityConfig(Class<?> dataClass, InheritanceType inheritanceStrategy, List<EntityConfig> currentInheritanceTypeSubclasses) throws SQLException {
+    String tableName = getEntityTableName(dataClass, annotationElementsReader);
+
+    switch (inheritanceStrategy) {
+      case SINGLE_TABLE:
+        return createSingleTableTableInfoForClass(dataClass, tableName, currentInheritanceTypeSubclasses);
+      case JOINED:
+        return createJoinedTableInfoForClass(dataClass, tableName, currentInheritanceTypeSubclasses);
+      // TODO: implement TABLE_PER_CLASS (or throw at least an Exception that it's currently not supported
+    }
+
+//    return getAndMayCreateTableInfoForClass(dataClass, connectionSource); // produces a Stack Overflow
+    return null;
+  }
+
+  public SingleTableEntityConfig createSingleTableTableInfoForClass(Class tableClass, String tableName, List<EntityConfig> subclasses) throws SQLException {
+    SingleTableEntityConfig singleTableEntityConfig = new SingleTableEntityConfig(tableClass, tableName, subclasses);
+
+    return singleTableEntityConfig;
+  }
+
+  public JoinedEntityConfig createJoinedTableInfoForClass(Class tableClass, String tableName, List<EntityConfig> subclasses) throws SQLException {
+    JoinedEntityConfig joinedEntityConfig = new JoinedEntityConfig(tableClass, tableName, subclasses);
+
+    return joinedEntityConfig;
+  }
 
   protected void readEntityAnnotations(Class<?> entityClass, EntityConfig entityConfig) throws SQLException {
     entityConfig.setTableName(getEntityTableName(entityClass, annotationElementsReader));
