@@ -168,11 +168,12 @@ public class JpaEntityConfigurationReader {
         return createSingleTableTableInfoForClass(dataClass, tableName, currentInheritanceTypeSubclasses);
       case JOINED:
         return createJoinedTableInfoForClass(dataClass, tableName, currentInheritanceTypeSubclasses);
-      // TODO: implement TABLE_PER_CLASS (or throw at least an Exception that it's currently not supported
+      case TABLE_PER_CLASS:
+      // TODO: implement TABLE_PER_CLASS
+        break;
     }
 
-//    return getAndMayCreateTableInfoForClass(dataClass, connectionSource); // produces a Stack Overflow
-    return null;
+    throw new SQLException("Sorry for the inconvienience, but currently only the Inheritance Strategies Single Table and Joined are implemented");
   }
 
   public SingleTableEntityConfig createSingleTableTableInfoForClass(Class tableClass, String tableName, List<EntityConfig> subclasses) throws SQLException {
