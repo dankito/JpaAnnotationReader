@@ -1,9 +1,5 @@
 package net.dankito.jpa.annotationreader;
 
-import net.dankito.jpa.annotationreader.JpaEntityConfigurationReader;
-import net.dankito.jpa.annotationreader.PropertyConfig;
-import net.dankito.jpa.annotationreader.Registry;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,9 +14,6 @@ public class JpaConfigurationReaderTestBase {
 
   @Before
   public void setup() {
-    Registry.getEntityRegistry().clear();
-    Registry.getPropertyRegistry().clear();
-
     entityConfigurationReader = new JpaEntityConfigurationReader();
   }
 
@@ -31,7 +24,7 @@ public class JpaConfigurationReaderTestBase {
 
 
   protected PropertyConfig getPropertyConfigurationForField(Class<?> entityClass, String fieldName) throws NoSuchFieldException {
-    return Registry.getPropertyRegistry().getPropertyConfiguration(entityClass.getDeclaredField(fieldName));
+    return entityConfigurationReader.getConfigRegistry().getPropertyConfiguration(entityClass.getDeclaredField(fieldName));
   }
 
 

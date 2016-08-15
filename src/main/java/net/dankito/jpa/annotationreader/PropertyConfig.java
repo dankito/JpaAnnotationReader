@@ -104,12 +104,14 @@ public class PropertyConfig {
 
   protected List<OrderByConfig> orderColumns = new ArrayList<>();
 
+  protected ConfigRegistry configRegistry = null;
+
 
   protected PropertyConfig() { // for Reflection
 
   }
 
-  public PropertyConfig(EntityConfig entityConfig, Property property) {
+  public PropertyConfig(EntityConfig entityConfig, Property property, ConfigRegistry configRegistry) {
     this.entityConfig = entityConfig;
     this.field = property.getField();
     this.fieldGetMethod = property.getGetMethod();
@@ -119,6 +121,8 @@ public class PropertyConfig {
 
     this.fieldName = property.getFieldName();
     setColumnName(this.fieldName);
+
+    this.configRegistry = configRegistry;
   }
 
   // for sub classes like DiscriminatorColumnConfig
@@ -314,7 +318,7 @@ public class PropertyConfig {
 
   public EntityConfig getTargetEntityConfig() {
     if(targetEntityConfig == null && targetEntityClass != null)
-      targetEntityConfig = Registry.getEntityRegistry().getEntityConfiguration(targetEntityClass);
+      targetEntityConfig = configRegistry.getEntityConfiguration(targetEntityClass);
     return targetEntityConfig;
   }
 
@@ -331,8 +335,11 @@ public class PropertyConfig {
   }
 
   public PropertyConfig getTargetPropertyConfig() {
-    if(targetPropertyConfig == null && targetProperty != null)
-      targetPropertyConfig = Registry.getPropertyRegistry().getPropertyConfiguration(targetEntityClass, targetProperty);
+    // TODO: this is really bad code design, try to get rid of it (and of configRegistry as well)
+    if(targetPropertyConfig == null && targetProperty != null) {
+      targetPropertyConfig = configRegistry.getPropertyConfiguration(targetEntityClass, targetProperty);
+    }
+
     return targetPropertyConfig;
   }
 

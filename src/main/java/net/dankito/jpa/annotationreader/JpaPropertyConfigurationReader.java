@@ -54,11 +54,12 @@ public class JpaPropertyConfigurationReader {
 
 
   protected AnnotationElementsReader annotationElementsReader = null;
-  private List<Class> knownEntities;
+
+  private ConfigRegistry configRegistry;
 
 
   public JpaPropertyConfigurationReader() {
-    this.annotationElementsReader = new AnnotationElementsReader(); // TODO: make configurable
+
   }
 
 
@@ -72,9 +73,9 @@ public class JpaPropertyConfigurationReader {
 //    configureIdProperty()
 
     for(Property entityProperty : ReflectionHelper.getEntityPersistableProperties(entityConfig.getEntityClass())) {
-      if(Registry.getPropertyRegistry().hasPropertyConfiguration(entityConfig.getEntityClass(), entityProperty) == true) // potentially dangerous as Properties on Parent classes
+      if(configRegistry.hasPropertyConfiguration(entityConfig.getEntityClass(), entityProperty) == true) // potentially dangerous as Properties on Parent classes
       // can be on multiple Entities, but its EntityConfig value is only set to first Entity's config
-        entityConfig.addProperty(Registry.getPropertyRegistry().getPropertyConfiguration(entityConfig.getEntityClass(), entityProperty));
+        entityConfig.addProperty(configRegistry.getPropertyConfiguration(entityConfig.getEntityClass(), entityProperty));
       else
         entityConfig.addProperty(readPropertyConfiguration(entityConfig, entityProperty));
     }
@@ -126,9 +127,9 @@ public class JpaPropertyConfigurationReader {
   }
 
   protected PropertyConfig readPropertyConfiguration(EntityConfig entityConfig, Property property) throws SQLException {
-    PropertyConfig propertyConfig = new PropertyConfig(entityConfig, property);
+    PropertyConfig propertyConfig = new PropertyConfig(entityConfig, property, configRegistry);
 
-    Registry.getPropertyRegistry().registerPropertyConfiguration(entityConfig.getEntityClass(), property, propertyConfig);
+    configRegistry.registerPropertyConfiguration(entityConfig.getEntityClass(), property, propertyConfig);
 
     setSqlType(property, propertyConfig);
     readIdConfiguration(property, propertyConfig, entityConfig);
@@ -586,9 +587,9 @@ public class JpaPropertyConfigurationReader {
   }
 
   protected void checkIfIsValidTargetEntity(Class targetEntityClass, Property property) throws SQLException {
-    if(knownEntities.contains(targetEntityClass) == false) {
-      throw new SQLException("Target Class " + targetEntityClass + " on Property " + property + " is not a valid Entity.\r\n" +
-          "Please annotate " + targetEntityClass + " with @Entity annotation and pass it as parameter to readConfiguration() method of JpaEntityConfigurationReader.");
+    if(configRegistry.isAnEntityWhichConfigurationShouldBeRead(targetEntityClass) == false) {
+      throw new SQLException("Target Class " + targetEntityClass + " on Property " + property + " is not an Entity which Configuration should be read.\r\n" +
+          "Please add it as parameter to readConfiguration() method of JpaEntityConfigurationReader.");
     }
   }
 
@@ -738,7 +739,7 @@ public class JpaPropertyConfigurationReader {
 
   protected JoinTableConfig readJoinTableAnnotation(Property owningSideProperty, PropertyConfig owningSidePropertyConfig, Class targetEntityClass, Property inverseSideProperty) throws SQLException {
     String owningSideEntityName = owningSidePropertyConfig.getEntityConfig().getTableName();
-    String inverseSideEntityName = JpaEntityConfigurationReader.getEntityTableName(targetEntityClass);
+    String inverseSideEntityName = JpaEntityConfigurationReader.getEntityTableName(targetEntityClass, annotationElementsReader);
     String joinTableName = owningSideEntityName + "_" + inverseSideEntityName; // TODO: check if table name is unique
     String owningSideJoinColumnNameStub = owningSidePropertyConfig.getEntityConfig().getTableName() + "_"; // if applied id column name has to be appended by calling (expensive) getIdColumnName(owningSidePropertyConfig.getEntityConfig())
     String inverseSideJoinColumnNameStub = owningSidePropertyConfig.getColumnName() + "_"; // if applied id column name has to be appended by calling (expensive) getIdColumnName(targetEntityClass)
@@ -830,31 +831,32 @@ public class JpaPropertyConfigurationReader {
     if(orderColumnFieldName != null) {
       Property orderByProperty = ReflectionHelper.findPropertyByName(targetEntityClass, orderColumnFieldName);
       if(orderByProperty != null) {
-        if(Registry.getPropertyRegistry().hasPropertyConfiguration(targetEntityClass, orderByProperty)) {
-          String columnName = Registry.getPropertyRegistry().getPropertyConfiguration(targetEntityClass, orderByProperty).getColumnName(); // TODO: this is not completely correct as Database may affords Upper Case column names
+        if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByProperty)) {
+          String columnName = configRegistry.getPropertyConfiguration(targetEntityClass, orderByProperty).getColumnName(); // TODO: this is not completely correct as Database may affords
+          // Upper Case column names
           return new OrderByConfig(columnName, ascending);
         }
         else // column not yet configured (that means its Entity configuration hasn't been read yet)
-          return new OrderByConfig(targetEntityClass, orderByProperty, ascending); // -> save Property for later column name retrieval // TODO: dito
+          return new OrderByConfig(targetEntityClass, orderByProperty, ascending, configRegistry); // -> save Property for later column name retrieval // TODO: dito
       }
     }
 
     Property idProperty = findIdProperty(targetEntityClass); // if column name for OrderBy is not set, entities get per default sorted by their Ids
     if(idProperty != null) { // actually this should never be the case for an entity
-      if(Registry.getPropertyRegistry().hasPropertyConfiguration(targetEntityClass, idProperty)) {
-        String columnName = Registry.getPropertyRegistry().getPropertyConfiguration(targetEntityClass, idProperty).getColumnName();
+      if(configRegistry.hasPropertyConfiguration(targetEntityClass, idProperty)) {
+        String columnName = configRegistry.getPropertyConfiguration(targetEntityClass, idProperty).getColumnName();
         return new OrderByConfig(columnName, ascending);
       }
       else
-        return new OrderByConfig(targetEntityClass, idProperty, ascending);
+        return new OrderByConfig(targetEntityClass, idProperty, ascending, configRegistry);
     }
 
     throw new SQLException("Could not find column for OrderBy string '" + orderByString + "' mapped to class " + targetEntityClass);
   }
 
-  public static String getColumnNameForField(Field field) throws SQLException {
-    if(Registry.getPropertyRegistry().hasPropertyForField(field))
-      return Registry.getPropertyRegistry().getPropertyConfiguration(field).getColumnName();
+  public static String getColumnNameForField(Field field, ConfigRegistry configRegistry) throws SQLException {
+    if(configRegistry.hasPropertyForField(field))
+      return configRegistry.getPropertyConfiguration(field).getColumnName();
 
     String columnName = null;
 
@@ -929,12 +931,13 @@ public class JpaPropertyConfigurationReader {
     throw new SQLException("Attribute " + attributeName + " of Annotation @" + annotationName + " (as used in " + property + ") is " + JpaEntityConfigurationReader.NotSupportedExceptionTrailMessage);
   }
 
-  public List<Class> getKnownEntities() {
-    return knownEntities;
+
+  public void setAnnotationElementsReader(AnnotationElementsReader annotationElementsReader) {
+    this.annotationElementsReader = annotationElementsReader;
   }
 
-  public void setKnownEntities(List<Class> knownEntities) {
-    this.knownEntities = knownEntities;
+  public void setConfigRegistry(ConfigRegistry configRegistry) {
+    this.configRegistry = configRegistry;
   }
 
 }

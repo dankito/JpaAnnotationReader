@@ -11,22 +11,25 @@ public class OrderByConfig {
   protected Class targetEntityClass = null;
   protected Property orderByPropertyForNotYetLoadedOrderByColumn = null;
 
+  protected ConfigRegistry configRegistry;
+
 
 	public OrderByConfig(String columnName, boolean ascending) {
 		this.columnName = columnName;
 		this.ascending = ascending;
 	}
 
-  public OrderByConfig(Class targetEntityClass, Property orderByProperty, boolean ascending) {
+  public OrderByConfig(Class targetEntityClass, Property orderByProperty, boolean ascending, ConfigRegistry configRegistry) {
     this(OrderByColumnNotYetLoaded, ascending);
     this.targetEntityClass = targetEntityClass;
     this.orderByPropertyForNotYetLoadedOrderByColumn = orderByProperty;
+    this.configRegistry = configRegistry;
   }
 
 	public String getColumnName() {
     if(OrderByColumnNotYetLoaded.equals(columnName)) {
-      if(Registry.getPropertyRegistry().hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn))
-        this.columnName = Registry.getPropertyRegistry().getPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn).getColumnName();
+      if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn))
+        this.columnName = configRegistry.getPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn).getColumnName();
       // TODO: what to return if property is not found?
     }
 		return columnName;

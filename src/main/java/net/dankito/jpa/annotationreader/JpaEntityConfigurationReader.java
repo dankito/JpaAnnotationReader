@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Inheritance;
@@ -40,11 +39,11 @@ public class JpaEntityConfigurationReader {
   private final static Logger log = LoggerFactory.getLogger(JpaEntityConfigurationReader.class);
 
 
-  protected List<Class> knownEntities = new ArrayList<>();
-
   protected JpaPropertyConfigurationReader propertyConfigurationReader = null;
 
-  protected static AnnotationElementsReader annotationElementsReader = null;
+  protected AnnotationElementsReader annotationElementsReader = null;
+
+  protected ConfigRegistry configRegistry = null;
 
 
   public JpaEntityConfigurationReader() {
@@ -63,27 +62,30 @@ public class JpaEntityConfigurationReader {
 
 
   public EntityConfig[] readConfiguration(Class... entityClasses) throws SQLException {
-    this.knownEntities = Arrays.asList(entityClasses);
-    propertyConfigurationReader.setKnownEntities(knownEntities);
+    configRegistry = new ConfigRegistry(Arrays.asList(entityClasses));
+
+    propertyConfigurationReader.setConfigRegistry(configRegistry);
+    propertyConfigurationReader.setAnnotationElementsReader(annotationElementsReader);
 
     List<EntityConfig> entityConfigs = new ArrayList<>();
 
-    for(Class entityClass : entityClasses)
+    for(Class entityClass : entityClasses) {
       entityConfigs.add(readEntityConfiguration(entityClass));
+    }
 
     return entityConfigs.toArray(new EntityConfig[entityConfigs.size()]);
   }
 
   protected EntityConfig readEntityConfiguration(Class<?> entityClass) throws SQLException {
     log.info("Reading configuration for Entity " + entityClass + " ...");
-    if(knownEntities.contains(entityClass) == false)
+    if(configRegistry.isAnEntityWhichConfigurationShouldBeRead(entityClass) == false)
       throw new SQLException("Class " + entityClass + " is an unknown Entity. Add this Class to to Classes parameter of Method readConfiguration()");
 
     if(classIsEntity(entityClass) == false)
       throw new SQLException("Class " + entityClass + " is not an Entity as no @Entity annotation could be found");
 
-    if(Registry.getEntityRegistry().hasEntityConfiguration(entityClass))
-      return Registry.getEntityRegistry().getEntityConfiguration(entityClass);
+    if(configRegistry.hasEntityConfiguration(entityClass))
+      return configRegistry.getEntityConfiguration(entityClass);
 
     EntityConfig entityConfig = createEntityConfig(entityClass, new ArrayList<EntityConfig>());
 
@@ -118,8 +120,8 @@ public class JpaEntityConfigurationReader {
   }
 
   protected <T, ID> EntityConfig<T, ID> getCachedOrCreateNewEntityConfig(Class entityClass, List<EntityConfig> currentInheritanceTypeSubEntities) throws SQLException {
-    if(Registry.getEntityRegistry().hasEntityConfiguration(entityClass)) {
-      EntityConfig entityConfig = Registry.getEntityRegistry().getEntityConfiguration(entityClass);
+    if(configRegistry.hasEntityConfiguration(entityClass)) {
+      EntityConfig entityConfig = configRegistry.getEntityConfiguration(entityClass);
       // TODO: re-implement
 //      if(entityConfig instanceof InheritanceEntityConfig) {
 //        ((InheritanceEntityConfig) entityConfig).addInheritanceLevelSubEntities(currentInheritanceTypeSubEntities);
@@ -141,7 +143,7 @@ public class JpaEntityConfigurationReader {
 //    else
 //      entityConfig = createInheritanceEntityConfig(entityClass, inheritanceStrategy, currentInheritanceTypeSubEntities);
 
-    Registry.getEntityRegistry().registerEntityConfiguration(entityClass, entityConfig);
+    configRegistry.registerEntityConfiguration(entityClass, entityConfig);
 
     readEntityAnnotations(entityClass, entityConfig);
     findLifeCycleEvents(entityClass, entityConfig);
@@ -178,7 +180,7 @@ public class JpaEntityConfigurationReader {
 //  }
 
   protected void readEntityAnnotations(Class<?> entityClass, EntityConfig entityConfig) throws SQLException {
-    entityConfig.setTableName(getEntityTableName(entityClass));
+    entityConfig.setTableName(getEntityTableName(entityClass, annotationElementsReader));
 
     readEntityAnnotation(entityClass, entityConfig);
     readTableAnnotation(entityClass, entityConfig);
@@ -268,8 +270,7 @@ public class JpaEntityConfigurationReader {
 
   // TODO: try to remove static modifiers
 
-
-  public static String getEntityTableName(Class<?> entityClass) throws SQLException {
+  public static String getEntityTableName(Class<?> entityClass, AnnotationElementsReader annotationElementsReader) throws SQLException {
     if(entityClass.isAnnotationPresent(Table.class)) {
       Table tableAnnotation = entityClass.getAnnotation(Table.class);
       Map<String, Object> elements = annotationElementsReader.getElements(tableAnnotation);;
@@ -362,4 +363,7 @@ public class JpaEntityConfigurationReader {
     return (InheritanceType)elements.get("strategy");
   }
 
+  public ConfigRegistry getConfigRegistry() {
+    return configRegistry;
+  }
 }
