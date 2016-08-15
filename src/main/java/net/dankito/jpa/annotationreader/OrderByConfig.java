@@ -1,5 +1,7 @@
 package net.dankito.jpa.annotationreader;
 
+import net.dankito.jpa.annotationreader.util.ConfigRegistry;
+
 public class OrderByConfig {
 
   protected final static String OrderByColumnNotYetLoaded = "OrderBy Column not yet loaded";

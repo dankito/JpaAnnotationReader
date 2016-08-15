@@ -5,6 +5,8 @@ import net.dankito.jpa.annotationreader.inheritance.JoinedEntityConfig;
 import net.dankito.jpa.annotationreader.inheritance.SingleTableEntityConfig;
 import net.dankito.jpa.annotationreader.reflection.AnnotationElementsReader;
 import net.dankito.jpa.annotationreader.reflection.IAnnotationElementsReader;
+import net.dankito.jpa.annotationreader.util.ConfigRegistry;
+import net.dankito.jpa.annotationreader.util.StringHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

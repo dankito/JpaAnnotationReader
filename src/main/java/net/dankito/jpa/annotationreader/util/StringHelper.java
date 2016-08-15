@@ -1,4 +1,4 @@
-package net.dankito.jpa.annotationreader;
+package net.dankito.jpa.annotationreader.util;
 
 /**
  * Created by ganymed on 05/03/15.

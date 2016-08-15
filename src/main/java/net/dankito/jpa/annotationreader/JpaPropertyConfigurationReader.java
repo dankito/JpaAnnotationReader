@@ -6,6 +6,8 @@ import net.dankito.jpa.annotationreader.reflection.ReflectionHelper;
 import net.dankito.jpa.annotationreader.relationconfig.ManyToManyConfig;
 import net.dankito.jpa.annotationreader.relationconfig.OneToManyConfig;
 import net.dankito.jpa.annotationreader.relationconfig.OneToOneConfig;
+import net.dankito.jpa.annotationreader.util.ConfigRegistry;
+import net.dankito.jpa.annotationreader.util.StringHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

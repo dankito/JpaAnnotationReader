@@ -1,5 +1,8 @@
-package net.dankito.jpa.annotationreader;
+package net.dankito.jpa.annotationreader.util;
 
+import net.dankito.jpa.annotationreader.EntityConfig;
+import net.dankito.jpa.annotationreader.Property;
+import net.dankito.jpa.annotationreader.PropertyConfig;
 import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
 
 import java.lang.reflect.Field;
@@ -109,7 +112,7 @@ public class ConfigRegistry {
       if(property.getField() != null)
         mapFieldToProperty.put(property.getField(), property);
       if(property.getGetMethod() != null)
-        mapGetMethodToProperty.put(property.getMethod, property);
+        mapGetMethodToProperty.put(property.getGetMethod(), property);
 
       return true;
     }
