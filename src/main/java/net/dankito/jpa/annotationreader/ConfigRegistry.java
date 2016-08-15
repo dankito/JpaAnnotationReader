@@ -1,5 +1,7 @@
 package net.dankito.jpa.annotationreader;
 
+import net.dankito.jpa.annotationreader.jointable.JoinTableConfig;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,7 +17,10 @@ public class ConfigRegistry {
   protected List<Class> entitiesToRead = new ArrayList<>();
 
 
-  protected Map<Class, EntityConfig> mapClassToTableInfo = new HashMap<>();
+  protected Map<Class, EntityConfig> mapClassToEntityConfig = new HashMap<>();
+
+
+  protected Map<Class, Map<Class, JoinTableConfig>> mapOwningSideClassToJoinTableConfig = new HashMap<>();
 
 
   protected Map<Class, Map<Property, PropertyConfig>> mapPropertyToPropertyConfig = new HashMap<>();
@@ -36,12 +41,12 @@ public class ConfigRegistry {
 
 
   public boolean hasEntityConfiguration(Class entityClass) {
-    return mapClassToTableInfo.containsKey(entityClass);
+    return mapClassToEntityConfig.containsKey(entityClass);
   }
 
   public boolean registerEntityConfiguration(Class entityClass, EntityConfig entityConfiguration) {
     if(hasEntityConfiguration(entityClass) == false) {
-      mapClassToTableInfo.put(entityClass, entityConfiguration);
+      mapClassToEntityConfig.put(entityClass, entityConfiguration);
       return true;
     }
 
@@ -49,7 +54,38 @@ public class ConfigRegistry {
   }
 
   public EntityConfig getEntityConfiguration(Class entityClass) {
-    return mapClassToTableInfo.get(entityClass);
+    return mapClassToEntityConfig.get(entityClass);
+  }
+
+
+  public boolean hasJoinTableConfiguration(Class owningSideClass, Class inverseSideClass) {
+    if(mapOwningSideClassToJoinTableConfig.containsKey(owningSideClass) &&
+        mapOwningSideClassToJoinTableConfig.get(owningSideClass).containsKey(inverseSideClass)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public boolean registerJoinTableConfiguration(Class owningSideClass, Class inverseSideClass, JoinTableConfig joinTableConfig) {
+    if(mapOwningSideClassToJoinTableConfig.containsKey(owningSideClass) == false) {
+      mapOwningSideClassToJoinTableConfig.put(owningSideClass, new HashMap<Class, JoinTableConfig>());
+    }
+
+    if(mapOwningSideClassToJoinTableConfig.get(owningSideClass).containsKey(inverseSideClass) == false) {
+      mapOwningSideClassToJoinTableConfig.get(owningSideClass).put(inverseSideClass, joinTableConfig);
+      return true;
+    }
+
+    return false;
+  }
+
+  public JoinTableConfig getJoinTableConfiguration(Class owningSideClass, Class inverseSideClass) {
+    if(hasJoinTableConfiguration(owningSideClass, inverseSideClass)) {
+      return mapOwningSideClassToJoinTableConfig.get(owningSideClass).get(inverseSideClass);
+    }
+
+    return null;
   }
 
 
@@ -128,11 +164,12 @@ public class ConfigRegistry {
 
 
   public void clear() { // TODO: only needed for testing purposes, try to remove again
-    mapClassToTableInfo.clear();
+    mapClassToEntityConfig.clear();
+
+    mapOwningSideClassToJoinTableConfig.clear();
 
     mapPropertyToPropertyConfig.clear();
     mapFieldToProperty.clear();
     mapGetMethodToProperty.clear();
   }
-
 }

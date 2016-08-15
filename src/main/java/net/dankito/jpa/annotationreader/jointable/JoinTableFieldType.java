@@ -13,7 +13,7 @@ public class JoinTableFieldType extends PropertyConfig {
 
 
   public JoinTableFieldType(ManyToManyConfig manyToManyConfig, String fieldName, Class dataType) throws SQLException {
-    super(manyToManyConfig.getEntityConfig(), fieldName);
+    super(manyToManyConfig.getJoinTableConfig(), fieldName);
 
     setColumnName(fieldName);
     assignType(dataType);

@@ -36,7 +36,7 @@ public class ManyToManyConfig extends AssociationConfig {
   protected JoinTableFieldType inverseSideFieldType = null;
   protected JoinTableFieldType[] fieldTypes = null;
 
-  protected EntityConfig entityConfig = null;
+  protected JoinTableConfig joinTableConfig = null;
 
 
   public ManyToManyConfig(Property owningSideProperty, Class inverseSideClass, FetchType fetch, CascadeType[] cascade) throws SQLException {
@@ -61,7 +61,7 @@ public class ManyToManyConfig extends AssociationConfig {
 
     createFieldTypes();
 
-    this.entityConfig = new JoinTableConfig(this);
+    this.joinTableConfig = new JoinTableConfig(this);
   }
 
   private void setOwningSideMembers(Property owningSideProperty) {
@@ -186,8 +186,8 @@ public class ManyToManyConfig extends AssociationConfig {
     return fieldTypes;
   }
 
-  public EntityConfig getEntityConfig() throws SQLException {
-    return entityConfig;
+  public JoinTableConfig getJoinTableConfig() throws SQLException {
+    return joinTableConfig;
   }
 
 
