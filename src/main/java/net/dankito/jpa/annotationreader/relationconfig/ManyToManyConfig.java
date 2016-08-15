@@ -55,13 +55,13 @@ public class ManyToManyConfig extends AssociationConfig {
 
     setInverseSideMembers(inverseSideProperty, inverseSideClass);
 
-    createFieldTypes();
-
     this.isBidirectional = inverseSideProperty != null;
 
-    this.entityConfig = new JoinTableConfig(this);
-
     determineJoinTableSettings();
+
+    createFieldTypes();
+
+    this.entityConfig = new JoinTableConfig(this);
   }
 
   private void setOwningSideMembers(Property owningSideProperty) {
