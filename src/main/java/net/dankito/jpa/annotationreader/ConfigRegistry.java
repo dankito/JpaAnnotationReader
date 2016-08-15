@@ -30,6 +30,11 @@ public class ConfigRegistry {
   protected Map<Method, Property> mapGetMethodToProperty = new HashMap<>();
 
 
+
+  public ConfigRegistry() {
+    this(new ArrayList<Class>());
+  }
+
   public ConfigRegistry(List<Class> entitiesToRead) {
     this.entitiesToRead = entitiesToRead;
   }
@@ -171,5 +176,9 @@ public class ConfigRegistry {
     mapPropertyToPropertyConfig.clear();
     mapFieldToProperty.clear();
     mapGetMethodToProperty.clear();
+  }
+
+  public void setEntitiesToRead(List<Class> entitiesToRead) {
+    this.entitiesToRead = entitiesToRead;
   }
 }

@@ -61,15 +61,20 @@ public class JpaEntityConfigurationReader {
   }
 
 
-  public EntityConfig[] readConfiguration(Class... entityClasses) throws SQLException {
-    configRegistry = new ConfigRegistry(Arrays.asList(entityClasses));
+  public EntityConfig[] readConfiguration(Class... entitiesToRead) throws SQLException {
+    return readConfiguration(new ConfigRegistry(), entitiesToRead);
+  }
+
+  public EntityConfig[] readConfiguration(ConfigRegistry configRegistry, Class... entitiesToRead) throws SQLException {
+    this.configRegistry = configRegistry;
+    this.configRegistry.setEntitiesToRead(Arrays.asList(entitiesToRead));
 
     propertyConfigurationReader.setConfigRegistry(configRegistry);
     propertyConfigurationReader.setAnnotationElementsReader(annotationElementsReader);
 
     List<EntityConfig> entityConfigs = new ArrayList<>();
 
-    for(Class entityClass : entityClasses) {
+    for(Class entityClass : entitiesToRead) {
       entityConfigs.add(readEntityConfiguration(entityClass));
     }
 
