@@ -233,7 +233,7 @@ public class ManyToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
   @Test
   public void supportedOneToOneAttributesSet_AttributesAreApplied() throws SQLException, NoSuchFieldException {
-    entityConfigurationReader.readConfiguration(new Class[]{ SupportedManyToOneAttributesSet.class, InverseSideUniDirectional.class });
+    entityConfigurationReader.readConfiguration(new Class[]{ SupportedManyToOneAttributesSet.class, InverseSideUniDirectional.class, ManyToOneUniDirectional.class });
     PropertyConfig inverseSidePropertyConfig = getPropertyConfigurationForField(SupportedManyToOneAttributesSet.class, "inverseSide");
 
     Assert.assertEquals(InverseSideUniDirectional.class, inverseSidePropertyConfig.getTargetEntityClass());

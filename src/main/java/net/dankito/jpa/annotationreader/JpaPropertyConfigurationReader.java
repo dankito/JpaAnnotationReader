@@ -179,11 +179,20 @@ public class JpaPropertyConfigurationReader {
       }
     }
 
-    if(propertyConfig.getDataType() == null && Collection.class.isAssignableFrom(property.getType()) == false) {
-      if(isAnnotationPresent(property, OneToOne.class) == false && isAnnotationPresent(property, ManyToOne.class) == false &&
-          isAnnotationPresent(property, OneToMany.class) == false && isAnnotationPresent(property, ManyToMany.class) == false)
-        throw new SQLException("Don't know how to serialize Type of Property " + property + ". If it's a relationship, did you forget to set appropriate Annotation (@OneToOne, " +
-            "@OneToMany, ...) on its field or get method?");
+    if(propertyConfig.getDataType() == null) {
+      if(isCollectionClass(property.getType())) {
+        Class collectionGenericClass = property.getGenericType();
+        if(configRegistry.isAnEntityWhichConfigurationShouldBeRead(collectionGenericClass) == false) {
+          throwEntityIsNotConfiguredToBeReadException(collectionGenericClass, property);
+        }
+      }
+      else {
+        if(isAnnotationPresent(property, OneToOne.class) == false && isAnnotationPresent(property, ManyToOne.class) == false &&
+            isAnnotationPresent(property, OneToMany.class) == false && isAnnotationPresent(property, ManyToMany.class) == false) {
+          throw new SQLException("Don't know how to serialize Type of Property " + property + ". If it's a relationship, did you forget to set appropriate Annotation (@OneToOne, " +
+              "@OneToMany, ...) on its field or get method?");
+        }
+      }
     }
 
     // TODO: also set other data type's SQL type
@@ -468,7 +477,7 @@ public class JpaPropertyConfigurationReader {
         }
       }
 
-      if (StringHelper.isNotNullOrEmpty(mappedBy) && mappedBy.equals(targetProperty.getFieldName()) && Collection.class.isAssignableFrom(targetProperty.getType())) {
+      if (StringHelper.isNotNullOrEmpty(mappedBy) && mappedBy.equals(targetProperty.getFieldName()) && isCollectionClass(targetProperty.getType())) {
         if(targetProperty.isGenericType()) {
           if(targetProperty.getGenericType().equals(property.getDeclaringClass()))
             return targetProperty;
@@ -566,7 +575,7 @@ public class JpaPropertyConfigurationReader {
   protected Class getTargetEntityClassForToManyAnnotation(Property property, Map<String, Object> elements, String annotationName) throws SQLException {
     Class targetEntityClass = null;
 
-    if (Collection.class.isAssignableFrom(property.getType()) == false) { // property type has to be assignable to Collection
+    if(isCollectionClass(property.getType()) == false) { // property type has to be assignable to Collection
       throw new SQLException("Type of @" + annotationName + " property " + property + " has to be assignable to a java.util.Collection");
     }
     else if ((Class)elements.get("targetEntity") != void.class) { // and either targetEntity value has to be set on @OneToMany Annotation
@@ -588,8 +597,7 @@ public class JpaPropertyConfigurationReader {
 
   protected void checkIfIsValidTargetEntity(Class targetEntityClass, Property property) throws SQLException {
     if(configRegistry.isAnEntityWhichConfigurationShouldBeRead(targetEntityClass) == false) {
-      throw new SQLException("Target Class " + targetEntityClass + " on Property " + property + " is not an Entity which Configuration should be read.\r\n" +
-          "Please add it as parameter to readConfiguration() method of JpaEntityConfigurationReader.");
+      throwEntityIsNotConfiguredToBeReadException(targetEntityClass, property);
     }
   }
 
@@ -938,12 +946,22 @@ public class JpaPropertyConfigurationReader {
   }
 
 
+  protected boolean isCollectionClass(Class clazz) {
+    return Collection.class.isAssignableFrom(clazz);
+  }
+
+
   protected void throwAnnotationNotSupportedException(String annotationName, Property property) throws SQLException {
     throw new SQLException("Annotation @" + annotationName + " (as used in " + property + ") is " + JpaEntityConfigurationReader.NotSupportedExceptionTrailMessage);
   }
 
   protected void throwAttributeNotSupportedException(String attributeName, String annotationName, Property property) throws SQLException {
     throw new SQLException("Attribute " + attributeName + " of Annotation @" + annotationName + " (as used in " + property + ") is " + JpaEntityConfigurationReader.NotSupportedExceptionTrailMessage);
+  }
+
+  protected void throwEntityIsNotConfiguredToBeReadException(Class entityClass, Property property) throws SQLException {
+    throw new SQLException("Target Class " + entityClass + " on Property " + property + " is not an Entity which Configuration should be read.\r\n" +
+        "Please add it as parameter to readConfiguration() method of JpaEntityConfigurationReader.");
   }
 
 

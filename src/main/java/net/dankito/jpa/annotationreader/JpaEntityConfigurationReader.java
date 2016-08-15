@@ -87,11 +87,13 @@ public class JpaEntityConfigurationReader {
 
   protected EntityConfig readEntityConfiguration(Class<?> entityClass) throws SQLException {
     log.info("Reading configuration for Entity " + entityClass + " ...");
-    if(configRegistry.isAnEntityWhichConfigurationShouldBeRead(entityClass) == false)
-      throw new SQLException("Class " + entityClass + " is an unknown Entity. Add this Class to to Classes parameter of Method readConfiguration()");
+    if(configRegistry.isAnEntityWhichConfigurationShouldBeRead(entityClass) == false) {
+      entityIsNotConfiguredToBeReadException(entityClass);
+    }
 
-    if(classIsEntity(entityClass) == false)
+    if(classIsEntity(entityClass) == false) {
       throw new SQLException("Class " + entityClass + " is not an Entity as no @Entity annotation could be found");
+    }
 
     if(configRegistry.hasEntityConfiguration(entityClass))
       return configRegistry.getEntityConfiguration(entityClass);
@@ -371,6 +373,12 @@ public class JpaEntityConfigurationReader {
     Map<String, Object> elements = annotationElementsReader.getElements(inheritanceAnnotation);
     return (InheritanceType)elements.get("strategy");
   }
+
+
+  protected EntityConfig entityIsNotConfiguredToBeReadException(Class entityClass) throws SQLException {
+    throw new SQLException("Class " + entityClass + " is an unknown Entity. Add this Class to to Classes parameter of Method readConfiguration()");
+  }
+
 
   public ConfigRegistry getConfigRegistry() {
     return configRegistry;
