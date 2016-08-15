@@ -140,7 +140,7 @@ public class JpaPropertyConfigurationReader {
 
     setSqlType(property, propertyConfig);
     readIdConfiguration(property, propertyConfig, entityConfig);
-    readVersionConfiguration(property, propertyConfig);
+    readVersionConfiguration(property, propertyConfig, entityConfig);
     readBasicAnnotation(property, propertyConfig);
     readColumnAnnotation(property, propertyConfig);
 
@@ -276,9 +276,10 @@ public class JpaPropertyConfigurationReader {
     }
   }
 
-  protected void readVersionConfiguration(Property property, PropertyConfig propertyConfig) {
+  protected void readVersionConfiguration(Property property, PropertyConfig propertyConfig, EntityConfig entityConfig) {
     if(isAnnotationPresent(property, Version.class)) {
       propertyConfig.setIsVersion(true);
+      entityConfig.setVersionProperty(propertyConfig);
     }
   }
 

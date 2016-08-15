@@ -48,7 +48,9 @@ public class EntityConfig<T, ID> {
 	protected List<PropertyConfig> foreignCollections = null;
   protected List<PropertyConfig> joinColumns = null;
   protected List<PropertyConfig> joinTableProperties = null;
+
 	protected PropertyConfig idProperty;
+  protected PropertyConfig versionProperty;
 
 	protected boolean foreignAutoCreate;
 	private Map<String, PropertyConfig> fieldNameMap;
@@ -313,8 +315,12 @@ public class EntityConfig<T, ID> {
       propertyConfigsColumnNames.put(propertyConfig.getColumnName().toUpperCase(), propertyConfig);
       this.propertyConfigs.add(propertyConfig);
 
-      if (propertyConfig.isId())
+      if(propertyConfig.isId()) {
         setIdProperty(propertyConfig);
+      }
+      if(propertyConfig.isVersion()) {
+        setVersionProperty(propertyConfig);
+      }
 
       return true;
     }
@@ -349,6 +355,15 @@ public class EntityConfig<T, ID> {
       throw new SQLException("There is more than one ID property defined for Entity " + this + ". Found (at least) " + this.idProperty + " and " + idProperty);
     this.idProperty = idProperty;
   }
+
+  public PropertyConfig getVersionProperty() {
+    return versionProperty;
+  }
+
+  public void setVersionProperty(PropertyConfig versionProperty) {
+    this.versionProperty = versionProperty;
+  }
+
 
   public Constructor<T> getConstructor() {
 		return constructor;
