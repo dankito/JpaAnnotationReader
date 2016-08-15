@@ -143,6 +143,14 @@ public class PropertyConfig {
 		return field;
 	}
 
+  public Method getFieldGetMethod() {
+    return fieldGetMethod;
+  }
+
+  public Method getFieldSetMethod() {
+    return fieldSetMethod;
+  }
+
   public Class getType() {
     return type;
   }

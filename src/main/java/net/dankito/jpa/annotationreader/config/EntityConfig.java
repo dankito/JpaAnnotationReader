@@ -293,6 +293,11 @@ public class EntityConfig<T, ID> {
     this.idProperty = idProperty;
   }
 
+
+  public boolean isVersionPropertySet() {
+    return getVersionProperty() != null;
+  }
+
   public PropertyConfig getVersionProperty() {
     return versionProperty;
   }
