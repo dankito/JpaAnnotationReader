@@ -172,17 +172,61 @@ public class EntityConfig<T, ID> {
   /**
 	 * Return the array of field types associated with the object.
 	 */
-	public PropertyConfig[] getPropertyConfigs() {
-		return propertyConfigs.toArray(new PropertyConfig[0]);
+	public PropertyConfig[] getProperties() {
+		return propertyConfigs.toArray(new PropertyConfig[0]); // do not return mutable List<PropertyConfig> instance
 	}
 
-  public List<PropertyConfig> getProperties() {
-    return propertyConfigs;
+  public PropertyConfig[] getRelationshipPropertiesWithCascadePersist() {
+    List<PropertyConfig> cascadePersistRelationshipProperties = new ArrayList<>();
+
+    for(PropertyConfig property : propertyConfigs) {
+      if(property.isRelationshipProperty() && property.cascadePersist()) {
+        cascadePersistRelationshipProperties.add(property);
+      }
+    }
+
+    return cascadePersistRelationshipProperties.toArray(new PropertyConfig[cascadePersistRelationshipProperties.size()]);
+  }
+
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeMerge() {
+    List<PropertyConfig> cascadeMergeRelationshipProperties = new ArrayList<>();
+
+    for(PropertyConfig property : propertyConfigs) {
+      if(property.isRelationshipProperty() && property.cascadeMerge()) {
+        cascadeMergeRelationshipProperties.add(property);
+      }
+    }
+
+    return cascadeMergeRelationshipProperties.toArray(new PropertyConfig[cascadeMergeRelationshipProperties.size()]);
+  }
+
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeRefresh() {
+    List<PropertyConfig> cascadeRefreshRelationshipProperties = new ArrayList<>();
+
+    for(PropertyConfig property : propertyConfigs) {
+      if(property.isRelationshipProperty() && property.cascadeRefresh()) {
+        cascadeRefreshRelationshipProperties.add(property);
+      }
+    }
+
+    return cascadeRefreshRelationshipProperties.toArray(new PropertyConfig[cascadeRefreshRelationshipProperties.size()]);
+  }
+
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeRemove() {
+    List<PropertyConfig> cascadeRemoveRelationshipProperties = new ArrayList<>();
+
+    for(PropertyConfig property : propertyConfigs) {
+      if(property.isRelationshipProperty() && property.cascadeRemove()) {
+        cascadeRemoveRelationshipProperties.add(property);
+      }
+    }
+
+    return cascadeRemoveRelationshipProperties.toArray(new PropertyConfig[cascadeRemoveRelationshipProperties.size()]);
   }
 
   public PropertyConfig[] getFieldTypesWithoutForeignCollections() {
     List<PropertyConfig> fieldTypesWithoutForeignCollections = new ArrayList<>();
-    for(PropertyConfig propertyConfig : getPropertyConfigs()) {
+    for(PropertyConfig propertyConfig : getProperties()) {
       if(propertyConfig.isForeignCollection() == false)
         fieldTypesWithoutForeignCollections.add(propertyConfig);
     }
