@@ -49,7 +49,7 @@ public class JoinedEntityConfig<T, ID> extends InheritanceEntityConfig<T, ID> {
       log.error("Could not get EntityConfig for Discriminator value " + discriminatorValue + " of JoinedEntityConfig " + this);
     else {
       for (EntityConfig subClassEntityConfig : (List<EntityConfig>) entityConfigForDiscriminator.getTopDownInheritanceHierarchy()) { // why is the cast needed?
-        subClassPropertyConfigs.addAll(Arrays.asList(subClassEntityConfig.getPropertyConfigs()));
+        subClassPropertyConfigs.addAll(Arrays.asList(subClassEntityConfig.getProperties()));
       }
     }
 

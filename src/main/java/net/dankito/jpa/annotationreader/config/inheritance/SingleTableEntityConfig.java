@@ -21,7 +21,7 @@ public class SingleTableEntityConfig<T, ID> extends InheritanceEntityConfig<T, I
 
   public SingleTableEntityConfig(Class entityClass, String tableName, List<EntityConfig> subEntities) throws SQLException {
     super(entityClass, tableName, subEntities, InheritanceType.SINGLE_TABLE);
-    allTableFieldsList = new ArrayList<>(Arrays.asList(getPropertyConfigs()));
+    allTableFieldsList = new ArrayList<>(Arrays.asList(getProperties()));
   }
 
 
