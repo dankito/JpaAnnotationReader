@@ -212,6 +212,18 @@ public class EntityConfig<T, ID> {
     return cascadeRefreshRelationshipProperties.toArray(new PropertyConfig[cascadeRefreshRelationshipProperties.size()]);
   }
 
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeDetach() {
+    List<PropertyConfig> cascadeDetachRelationshipProperties = new ArrayList<>();
+
+    for(PropertyConfig property : propertyConfigs) {
+      if(property.isRelationshipProperty() && property.cascadeDetach()) {
+        cascadeDetachRelationshipProperties.add(property);
+      }
+    }
+
+    return cascadeDetachRelationshipProperties.toArray(new PropertyConfig[cascadeDetachRelationshipProperties.size()]);
+  }
+
   public PropertyConfig[] getRelationshipPropertiesWithCascadeRemove() {
     List<PropertyConfig> cascadeRemoveRelationshipProperties = new ArrayList<>();
 

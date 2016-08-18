@@ -67,7 +67,8 @@ public class PropertyConfig {
 
   protected Boolean cascadePersist = null;
   protected Boolean cascadeRefresh = null;
-  protected Boolean cascadeMerge = null; // TODO
+  protected Boolean cascadeMerge = null;
+  protected Boolean cascadeDetach = null;
   protected Boolean cascadeRemove = null;
 
   protected boolean isId;
@@ -558,6 +559,21 @@ public class PropertyConfig {
     }
 
     return cascadeRefresh;
+  }
+
+  public boolean cascadeDetach() {
+    if(cascadeDetach == null) {
+      cascadeDetach = false;
+
+      for(CascadeType enabledCascade : cascade) {
+        if(CascadeType.DETACH.equals(enabledCascade) || CascadeType.ALL.equals(enabledCascade)) {
+          cascadeDetach = true;
+          break;
+        }
+      }
+    }
+
+    return cascadeDetach;
   }
 
   public boolean cascadeRemove() {

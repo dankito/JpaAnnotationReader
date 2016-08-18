@@ -88,6 +88,8 @@ public class OneToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
     Assert.assertFalse(inverseSidePropertyConfig.cascadePersist());
     Assert.assertFalse(inverseSidePropertyConfig.cascadeRefresh());
+    Assert.assertFalse(inverseSidePropertyConfig.cascadeMerge());
+    Assert.assertFalse(inverseSidePropertyConfig.cascadeDetach());
     Assert.assertFalse(inverseSidePropertyConfig.cascadeRemove());
   }
 
@@ -261,6 +263,8 @@ public class OneToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
     Assert.assertTrue(inverseSidePropertyConfig.cascadePersist());
     Assert.assertTrue(inverseSidePropertyConfig.cascadeRefresh());
+    Assert.assertTrue(inverseSidePropertyConfig.cascadeMerge());
+    Assert.assertTrue(inverseSidePropertyConfig.cascadeDetach());
     Assert.assertTrue(inverseSidePropertyConfig.cascadeRemove());
   }
 

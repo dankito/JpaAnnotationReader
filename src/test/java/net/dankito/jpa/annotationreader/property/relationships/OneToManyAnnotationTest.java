@@ -73,6 +73,8 @@ public class OneToManyAnnotationTest extends JpaConfigurationReaderTestBase {
 
     Assert.assertFalse(manysPropertyConfig.cascadePersist());
     Assert.assertFalse(manysPropertyConfig.cascadeRefresh());
+    Assert.assertFalse(manysPropertyConfig.cascadeMerge());
+    Assert.assertFalse(manysPropertyConfig.cascadeDetach());
     Assert.assertFalse(manysPropertyConfig.cascadeRemove());
   }
 

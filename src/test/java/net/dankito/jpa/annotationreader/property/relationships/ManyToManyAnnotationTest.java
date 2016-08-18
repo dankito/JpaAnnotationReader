@@ -66,6 +66,8 @@ public class ManyToManyAnnotationTest extends JpaConfigurationReaderTestBase {
 
     Assert.assertFalse(inverseSidePropertyConfig.cascadePersist());
     Assert.assertFalse(inverseSidePropertyConfig.cascadeRefresh());
+    Assert.assertFalse(inverseSidePropertyConfig.cascadeMerge());
+    Assert.assertFalse(inverseSidePropertyConfig.cascadeDetach());
     Assert.assertFalse(inverseSidePropertyConfig.cascadeRemove());
   }
 

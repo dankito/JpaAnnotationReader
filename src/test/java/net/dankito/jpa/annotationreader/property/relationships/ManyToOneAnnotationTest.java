@@ -92,6 +92,8 @@ public class ManyToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
     Assert.assertFalse(onePropertyConfig.cascadePersist());
     Assert.assertFalse(onePropertyConfig.cascadeRefresh());
+    Assert.assertFalse(onePropertyConfig.cascadeMerge());
+    Assert.assertFalse(onePropertyConfig.cascadeDetach());
     Assert.assertFalse(onePropertyConfig.cascadeRemove());
   }
 
@@ -244,6 +246,8 @@ public class ManyToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
     Assert.assertTrue(inverseSidePropertyConfig.cascadePersist());
     Assert.assertTrue(inverseSidePropertyConfig.cascadeRefresh());
+    Assert.assertTrue(inverseSidePropertyConfig.cascadeMerge());
+    Assert.assertTrue(inverseSidePropertyConfig.cascadeDetach());
     Assert.assertTrue(inverseSidePropertyConfig.cascadeRemove());
   }
 
