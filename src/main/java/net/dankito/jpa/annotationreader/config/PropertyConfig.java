@@ -429,6 +429,11 @@ public class PropertyConfig {
     this.fetch = fetch;
   }
 
+  public boolean isLazyLoading() {
+    return fetch == FetchType.LAZY;
+  }
+
+
   public CascadeType[] getCascade() {
     return cascade;
   }
