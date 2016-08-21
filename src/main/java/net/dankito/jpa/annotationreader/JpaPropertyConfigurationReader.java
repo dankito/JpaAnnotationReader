@@ -378,9 +378,6 @@ public class JpaPropertyConfigurationReader {
       propertyConfig.setOneToOneConfig(new OneToOneConfig(property, targetEntityClass, joinColumnName, fetch, cascade)); // TODO: remove
     }
     else { // bidirectional @OneToOne association
-      if(isAnnotationPresent(targetProperty, JoinColumn.class))
-        joinColumnName = getPropertyAnnotation(targetProperty, JoinColumn.class).name(); // TODO: this should be false as if otherside has the JoinColumn i don't need to set it here
-
       Property owningSide;
       Property inverseSide;
 
