@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class EntityConfig<T, ID> {
 	protected List<PropertyConfig> propertyConfigs = new ArrayList<>();
   protected Map<String, PropertyConfig> propertyConfigsColumnNames = new HashMap<>(); // TODO: merge with propertyConfigs
 
-	protected List<PropertyConfig> foreignCollections = null;
+	protected PropertyConfig[] collections = new PropertyConfig[0];
   protected List<PropertyConfig> joinColumns = null;
   protected List<PropertyConfig> joinTableProperties = null;
 
@@ -177,6 +178,7 @@ public class EntityConfig<T, ID> {
 	}
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadePersist() {
+    // TODO: cache this info (and reset cache when adding item to propertyConfigs) so that we don't loose CPU time on each call to getRelationshipPropertiesWithCascadePersist()
     List<PropertyConfig> cascadePersistRelationshipProperties = new ArrayList<>();
 
     for(PropertyConfig property : propertyConfigs) {
@@ -383,22 +385,20 @@ public class EntityConfig<T, ID> {
 		return (idProperty != null && propertyConfigs.size() > 1);
 	}
 
-  public boolean hasForeignCollections() {
-    return foreignCollections != null && foreignCollections.size() > 0;
+  public boolean hasCollectionProperties() {
+    return collections.length > 0;
   }
 
-	/**
-	 * Return an array with the fields that are {@link ForeignCollection}s or a blank array if none.
-	 */
-	public List<PropertyConfig> getForeignCollections() {
-    if(foreignCollections == null)
-      foreignCollections = new ArrayList<>();
-		return foreignCollections;
+	public PropertyConfig[] getCollectionProperties() {
+		return collections;
 	}
 
-  public boolean addForeignCollection(PropertyConfig foreignCollectionProperty) throws SQLException {
-    addProperty(foreignCollectionProperty);
-    return getForeignCollections().add(foreignCollectionProperty);
+  public void addCollectionProperty(PropertyConfig collectionProperty) throws SQLException {
+    addProperty(collectionProperty);
+
+    List<PropertyConfig> collectionsList = new ArrayList<>(Arrays.asList(collections));
+    collectionsList.add(collectionProperty);
+    this.collections = collectionsList.toArray(new PropertyConfig[collectionsList.size()]);
   }
 
   public boolean isJoinTable() {
