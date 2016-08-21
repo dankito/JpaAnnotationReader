@@ -361,14 +361,14 @@ public class JpaPropertyConfigurationReader {
     if ((boolean) elements.get("orphanRemoval") == true)
       throwAttributeNotSupportedException("orphanRemoval", "OneToOne", property);
 
+    // TODO: at this Stage joinColumnName may already be set through readJoinColumnConfiguration()
     String joinColumnName = getJoinColumnName(property, targetEntityClass);
 
-    configureOneToOneTargetProperty(property, propertyConfig, oneToOneAnnotation, targetEntityClass, fetch, cascade, joinColumnName);
+    configureOneToOneTargetProperty(property, propertyConfig, elements, targetEntityClass, fetch, cascade, joinColumnName);
   }
 
-  protected void configureOneToOneTargetProperty(Property property, PropertyConfig propertyConfig, OneToOne oneToOneAnnotation, Class targetEntityClass, FetchType fetch, CascadeType[] cascade, String joinColumnName) throws SQLException {
-    Map<String, Object> elements = annotationElementsReader.getElements(oneToOneAnnotation);
-    String mappedBy = (String)elements.get("mappedBy");
+  protected void configureOneToOneTargetProperty(Property property, PropertyConfig propertyConfig, Map<String, Object> oneToOneAnnotationElements, Class targetEntityClass, FetchType fetch, CascadeType[] cascade, String joinColumnName) throws SQLException {
+    String mappedBy = (String)oneToOneAnnotationElements.get("mappedBy");
     Property targetProperty = findOneToOneTargetProperty(property, mappedBy, targetEntityClass);
 
     if(targetProperty == null) { // unidirectional association
