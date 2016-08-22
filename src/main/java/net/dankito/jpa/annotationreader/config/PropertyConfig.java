@@ -161,7 +161,7 @@ public class PropertyConfig {
     this.typeIsACollection = Collection.class.isAssignableFrom(type);
   }
 
-  public boolean isTypeIsACollection() {
+  public boolean isTypeACollection() {
     return typeIsACollection;
   }
 
@@ -511,7 +511,7 @@ public class PropertyConfig {
   }
 
 
-  public boolean isForeignCollection() {
+  public boolean isCollectionProperty() {
     // TODO: is this correctly implemented with isManyCardinalityRelationshipProperty? Also see isForeign()
     return (isOneToManyField || isManyToManyField);
   }
