@@ -81,7 +81,7 @@ public class JpaPropertyConfigurationReader {
 
     for(Property entityProperty : ReflectionHelper.getEntityPersistableProperties(entityConfig.getEntityClass())) {
       if(configRegistry.hasPropertyConfiguration(entityConfig.getEntityClass(), entityProperty) == true) // potentially dangerous as Properties on Parent classes
-      // can be on multiple Entities, but its EntityConfig value is only set to first Entity's config
+        // can be on multiple Entities, but its EntityConfig value is only set to first Entity's config
         entityConfig.addProperty(configRegistry.getPropertyConfiguration(entityConfig.getEntityClass(), entityProperty));
       else
         entityConfig.addProperty(readPropertyConfiguration(entityConfig, entityProperty));
@@ -92,9 +92,9 @@ public class JpaPropertyConfigurationReader {
     Property foundIdProperty = null;
 
     for(Property property : ReflectionHelper.getEntityPersistableProperties(entityConfig.getEntityClass())) {
-        if(foundIdProperty != null)
-          throw new SQLException("@Id Annotation already found on " + foundIdProperty + ", but @Id is also set on property " + property + ". " +
-              "Only for one Field or Method per Class Hierarchy @Id Annotation can be set.");
+      if(foundIdProperty != null)
+        throw new SQLException("@Id Annotation already found on " + foundIdProperty + ", but @Id is also set on property " + property + ". " +
+            "Only for one Field or Method per Class Hierarchy @Id Annotation can be set.");
 
       foundIdProperty = property;
       if(entityConfig.getAccess() == null) { // only set Access if not already set explicitly through @Access annotation
@@ -801,7 +801,7 @@ public class JpaPropertyConfigurationReader {
     JoinColumn[] inverseJoinColumns = (JoinColumn[])elements.get("inverseJoinColumns");
     if(inverseJoinColumns.length > 1)
       throw new SQLException("Sorry for the inconvenience, but @JoinTable with more than one @InverseJoinColumn value as on property " + owningSideProperty + " is not supported");
-    // TODO:
+      // TODO:
     else if(inverseJoinColumns.length == 1)
       inverseSideJoinColumnNameStub += inverseJoinColumns[0].name(); // TODO: remove name() method invocation on Annotation as well
     else
@@ -862,9 +862,9 @@ public class JpaPropertyConfigurationReader {
       Property orderByProperty = ReflectionHelper.findPropertyByName(targetEntityClass, orderColumnFieldName);
       if(orderByProperty != null) {
         if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByProperty)) {
-          String columnName = configRegistry.getPropertyConfiguration(targetEntityClass, orderByProperty).getColumnName(); // TODO: this is not completely correct as Database may affords
-          // Upper Case column names
-          return new OrderByConfig(columnName, ascending);
+          PropertyConfig orderByTargetProperty = configRegistry.getPropertyConfiguration(targetEntityClass, orderByProperty); // TODO: this is not completely correct as
+          // Database may affords Upper Case column names
+          return new OrderByConfig(orderByTargetProperty, ascending);
         }
         else // column not yet configured (that means its Entity configuration hasn't been read yet)
           return new OrderByConfig(targetEntityClass, orderByProperty, ascending, configRegistry); // -> save Property for later column name retrieval // TODO: dito
@@ -874,8 +874,8 @@ public class JpaPropertyConfigurationReader {
     Property idProperty = findIdProperty(targetEntityClass); // if column name for OrderBy is not set, entities get per default sorted by their Ids
     if(idProperty != null) { // actually this should never be the case for an entity
       if(configRegistry.hasPropertyConfiguration(targetEntityClass, idProperty)) {
-        String columnName = configRegistry.getPropertyConfiguration(targetEntityClass, idProperty).getColumnName();
-        return new OrderByConfig(columnName, ascending);
+        PropertyConfig orderByTargetProperty = configRegistry.getPropertyConfiguration(targetEntityClass, idProperty);
+        return new OrderByConfig(orderByTargetProperty, ascending);
       }
       else
         return new OrderByConfig(targetEntityClass, idProperty, ascending, configRegistry);
@@ -943,7 +943,7 @@ public class JpaPropertyConfigurationReader {
       property.annotatedInstanceExtracted(annotationClass, annotationInstance);
       return annotationInstance;
     }
-     else if(property.getGetMethod() != null && property.getGetMethod().isAnnotationPresent(annotationClass)) {
+    else if(property.getGetMethod() != null && property.getGetMethod().isAnnotationPresent(annotationClass)) {
       T annotationInstance = property.getGetMethod().getAnnotation(annotationClass);
       property.annotatedInstanceExtracted(annotationClass, annotationInstance);
       return annotationInstance;

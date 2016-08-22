@@ -10,16 +10,23 @@ public class OrderByConfig {
   protected String columnName;
   protected boolean ascending;
 
+  protected PropertyConfig orderByTargetProperty;
+
   protected Class targetEntityClass = null;
   protected Property orderByPropertyForNotYetLoadedOrderByColumn = null;
 
   protected ConfigRegistry configRegistry;
 
 
-	public OrderByConfig(String columnName, boolean ascending) {
-		this.columnName = columnName;
-		this.ascending = ascending;
-	}
+  protected OrderByConfig(String columnName, boolean ascending) {
+    this.columnName = columnName;
+    this.ascending = ascending;
+  }
+
+  public OrderByConfig(PropertyConfig orderByTargetProperty, boolean ascending) {
+    this(orderByTargetProperty.getColumnName(), ascending);
+    this.orderByTargetProperty = orderByTargetProperty;
+  }
 
   public OrderByConfig(Class targetEntityClass, Property orderByProperty, boolean ascending, ConfigRegistry configRegistry) {
     this(OrderByColumnNotYetLoaded, ascending);
@@ -28,19 +35,35 @@ public class OrderByConfig {
     this.configRegistry = configRegistry;
   }
 
-	public String getColumnName() {
+
+  public String getColumnName() {
     if(OrderByColumnNotYetLoaded.equals(columnName)) {
-      if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn)) {
-        this.columnName = configRegistry.getPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn).getColumnName();
-        this.configRegistry = null; // ConfigRegistry is then not needed anymore -> we can release it
+      if(getOrderByTargetProperty() != null) {
+        this.columnName = getOrderByTargetProperty().getColumnName();
       }
       // TODO: what to return if property is not found?
     }
-		return columnName;
-	}
 
-	public boolean isAscending() {
-		return ascending;
-	}
+    return columnName;
+  }
+
+  public PropertyConfig getOrderByTargetProperty() {
+    if(orderByTargetProperty == null) {
+      if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn)) {
+        this.orderByTargetProperty = configRegistry.getPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn);
+
+        this.configRegistry = null; // ConfigRegistry is then not needed anymore -> we can release it
+        this.targetEntityClass = null;
+        this.orderByPropertyForNotYetLoadedOrderByColumn = null;
+      }
+      // TODO: what to return if property is not found?
+    }
+
+    return orderByTargetProperty;
+  }
+
+  public boolean isAscending() {
+    return ascending;
+  }
 
 }
