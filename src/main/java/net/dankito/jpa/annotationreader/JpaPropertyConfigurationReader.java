@@ -694,7 +694,9 @@ public class JpaPropertyConfigurationReader {
     propertyConfig.setIsBidirectional(false);
     propertyConfig.setIsOwningSide(true); // TODO: is this correct?
 
+    // TODO: why not setting OneToManyConfig ?
 //    String joinColumnName = getOneToManyJoinColumnName(oneSideField);
+//    String joinColumnName = propertyConfig.getColumnName();
 //    propertyConfig.setOneToManyConfig(new OneToManyConfig(property, joinColumnName, fetchType, cascade));
   }
 
