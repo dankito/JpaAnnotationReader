@@ -238,17 +238,16 @@ public class EntityConfig<T, ID> {
     return cascadeRemoveRelationshipProperties.toArray(new PropertyConfig[cascadeRemoveRelationshipProperties.size()]);
   }
 
-  public PropertyConfig[] getFieldTypesWithoutForeignCollections() {
-    List<PropertyConfig> fieldTypesWithoutForeignCollections = new ArrayList<>();
-    for(PropertyConfig propertyConfig : getProperties()) {
-      if(propertyConfig.isForeignCollection() == false)
-        fieldTypesWithoutForeignCollections.add(propertyConfig);
-    }
-    PropertyConfig[] result = new PropertyConfig[fieldTypesWithoutForeignCollections.size()];
-    result = fieldTypesWithoutForeignCollections.toArray(result);
-    fieldTypesWithoutForeignCollections = null;
+  public PropertyConfig[] getPropertiesWithoutCollectionProperties() {
+    List<PropertyConfig> propertiesWithoutCollectionProperties = new ArrayList<>();
 
-    return result;
+    for(PropertyConfig propertyConfig : getProperties()) {
+      if(propertyConfig.isCollectionProperty() == false)
+        propertiesWithoutCollectionProperties.add(propertyConfig);
+    }
+
+    PropertyConfig[] temp = new PropertyConfig[propertiesWithoutCollectionProperties.size()];
+    return propertiesWithoutCollectionProperties.toArray(temp);
   }
 
 	/**
