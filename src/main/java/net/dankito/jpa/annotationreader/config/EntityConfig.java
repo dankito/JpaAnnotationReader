@@ -46,7 +46,7 @@ public class EntityConfig<T, ID> {
 	protected List<PropertyConfig> propertyConfigs = new ArrayList<>();
   protected Map<String, PropertyConfig> propertyConfigsColumnNames = new HashMap<>(); // TODO: merge with propertyConfigs
 
-	protected PropertyConfig[] collections = new PropertyConfig[0];
+	protected List<PropertyConfig> collectionProperties = new ArrayList<>();
   protected List<PropertyConfig> joinColumns = null;
   protected List<PropertyConfig> joinTableProperties = null;
 
@@ -316,6 +316,10 @@ public class EntityConfig<T, ID> {
         setVersionProperty(propertyConfig);
       }
 
+      if(propertyConfig.isCollectionProperty()) {
+        collectionProperties.add(propertyConfig);
+      }
+
       return true;
     }
     else
@@ -385,20 +389,12 @@ public class EntityConfig<T, ID> {
 	}
 
   public boolean hasCollectionProperties() {
-    return collections.length > 0;
+    return collectionProperties.size() > 0;
   }
 
 	public PropertyConfig[] getCollectionProperties() {
-		return collections;
+		return collectionProperties.toArray(new PropertyConfig[collectionProperties.size()]);
 	}
-
-  public void addCollectionProperty(PropertyConfig collectionProperty) throws SQLException {
-    addProperty(collectionProperty);
-
-    List<PropertyConfig> collectionsList = new ArrayList<>(Arrays.asList(collections));
-    collectionsList.add(collectionProperty);
-    this.collections = collectionsList.toArray(new PropertyConfig[collectionsList.size()]);
-  }
 
   public boolean isJoinTable() {
     return false;

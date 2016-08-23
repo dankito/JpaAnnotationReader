@@ -644,7 +644,6 @@ public class JpaPropertyConfigurationReader {
     propertyConfig.setIsRelationshipProperty(true);
     propertyConfig.setIsOneCardinalityRelationshipProperty(true);
     propertyConfig.setIsOneToManyField(true);
-    propertyConfig.getEntityConfig().addCollectionProperty(propertyConfig);
 
     Map<String, Object> elements = annotationElementsReader.getElements(oneToManyAnnotation);
 
@@ -704,7 +703,6 @@ public class JpaPropertyConfigurationReader {
     propertyConfig.setIsRelationshipProperty(true);
     propertyConfig.setIsManyCardinalityRelationshipProperty(true);
     propertyConfig.setIsManyToManyField(true);
-    propertyConfig.getEntityConfig().addCollectionProperty(propertyConfig);
 
     Map<String, Object> elements = annotationElementsReader.getElements(manyToManyAnnotation);
 
