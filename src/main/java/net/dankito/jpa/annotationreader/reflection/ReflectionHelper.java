@@ -120,7 +120,9 @@ public class ReflectionHelper {
     for(Method method : methods) {
       if(isGetMethod(method)) { // is a get method
 //        if(isNonFinalNonStaticNonAbstractMethod(method)) // is persistable
-          persistableGetMethods.put(method.getName(), method); // TODO: this hides overwritten methods from sub classes
+        if(persistableGetMethods.containsKey(method.getName()) == false) { // don't overwrite methods from sub classes
+          persistableGetMethods.put(method.getName(), method);
+        }
       }
     }
   }
