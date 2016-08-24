@@ -19,6 +19,10 @@ public class DiscriminatorColumnConfig extends PropertyConfig {
     setLength(length);
     setColumnDefinition(columnDefinition);
 
+    determineDataType(discriminatorType);
+  }
+
+  private void determineDataType(DiscriminatorType discriminatorType) {
     switch(discriminatorType) {
       case INTEGER:
         this.type = Integer.class;
@@ -33,6 +37,11 @@ public class DiscriminatorColumnConfig extends PropertyConfig {
         setDataType(DataType.STRING);
         break;
     }
+  }
+
+
+  public String getDiscriminatorValue(Object object) {
+    return ((InheritanceEntityConfig)this.entityConfig).getDiscriminatorValueForEntityClass(object.getClass());
   }
 
 
