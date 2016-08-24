@@ -126,7 +126,7 @@ public class JpaEntityConfigurationReader {
         currentInheritanceTypeSubEntities.add(currentEntityConfig);
 
         if(previousEntityConfig != null)
-          currentEntityConfig.addChildTableInfo(previousEntityConfig);
+          currentEntityConfig.addSubClassEntityConfig(previousEntityConfig);
 
         previousEntityConfig = currentEntityConfig;
       }

@@ -47,7 +47,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(2, baseClassConfig.getProperties().length); // id + DiscriminatorColumn
 //    Assert.assertTrue(baseClassConfig instanceof InheritanceEntityConfig);
     Assert.assertEquals(baseClassConfig, baseClassConfig.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(2, baseClassConfig.getChildEntityConfigs().size());
+    Assert.assertEquals(2, baseClassConfig.getSubClassEntityConfigs().size());
 
     EntityConfig subClass1Config = entities[1];
     Assert.assertEquals(baseClassConfig, subClass1Config.getParentEntityConfig());
@@ -55,7 +55,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(1, subClass1Config.getProperties().length);
     Assert.assertEquals(baseClassConfig.getIdProperty(), subClass1Config.getIdProperty());
     Assert.assertEquals(baseClassConfig, subClass1Config.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(0, subClass1Config.getChildEntityConfigs().size());
+    Assert.assertEquals(0, subClass1Config.getSubClassEntityConfigs().size());
 
     EntityConfig subClass2Config = entities[2];
     Assert.assertEquals(baseClassConfig, subClass2Config.getParentEntityConfig());
@@ -63,7 +63,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(1, subClass2Config.getProperties().length);
     Assert.assertEquals(baseClassConfig.getIdProperty(), subClass2Config.getIdProperty());
     Assert.assertEquals(baseClassConfig, subClass2Config.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(0, subClass2Config.getChildEntityConfigs().size());
+    Assert.assertEquals(0, subClass2Config.getSubClassEntityConfigs().size());
   }
 
 
@@ -93,7 +93,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(2, baseClassConfig.getProperties().length); // id + DiscriminatorColumn
 //    Assert.assertTrue(baseClassConfig instanceof InheritanceEntityConfig);
     Assert.assertEquals(baseClassConfig, baseClassConfig.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(2, baseClassConfig.getChildEntityConfigs().size());
+    Assert.assertEquals(2, baseClassConfig.getSubClassEntityConfigs().size());
 
     EntityConfig subClass1Config = entities[1];
     Assert.assertEquals(baseClassConfig, subClass1Config.getParentEntityConfig());
@@ -101,7 +101,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(1, subClass1Config.getProperties().length);
     Assert.assertEquals(baseClassConfig.getIdProperty(), subClass1Config.getIdProperty());
     Assert.assertEquals(baseClassConfig, subClass1Config.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(0, subClass1Config.getChildEntityConfigs().size());
+    Assert.assertEquals(0, subClass1Config.getSubClassEntityConfigs().size());
 
     EntityConfig subClass2Config = entities[2];
     Assert.assertEquals(baseClassConfig, subClass2Config.getParentEntityConfig());
@@ -109,7 +109,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(1, subClass2Config.getProperties().length);
     Assert.assertEquals(baseClassConfig.getIdProperty(), subClass2Config.getIdProperty());
     Assert.assertEquals(baseClassConfig, subClass2Config.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(0, subClass2Config.getChildEntityConfigs().size());
+    Assert.assertEquals(0, subClass2Config.getSubClassEntityConfigs().size());
   }
 
 
@@ -138,7 +138,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
     Assert.assertEquals(2, baseClassConfig.getProperties().length); // id + DiscriminatorColumn
 //    Assert.assertTrue(baseClassConfig instanceof InheritanceEntityConfig);
     Assert.assertEquals(baseClassConfig, baseClassConfig.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(2, baseClassConfig.getChildEntityConfigs().size());
+    Assert.assertEquals(2, baseClassConfig.getSubClassEntityConfigs().size());
 
     EntityConfig subClass1Config = entities[1];
     Assert.assertEquals(baseClassConfig, subClass1Config.getParentEntityConfig());
@@ -146,7 +146,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
 //    Assert.assertTrue(subClass1Config.getIdProperty() instanceof InheritanceSubTableIdPropertyConfig);
 //    Assert.assertEquals(baseClassConfig.getIdProperty(), ((InheritanceSubTableIdPropertyConfig)subClass1Config.getIdProperty()).getInheritanceHierarchyTopLevelIdProperty());
     Assert.assertEquals(baseClassConfig, subClass1Config.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(0, subClass1Config.getChildEntityConfigs().size());
+    Assert.assertEquals(0, subClass1Config.getSubClassEntityConfigs().size());
 
     EntityConfig subClass2Config = entities[2];
     Assert.assertEquals(baseClassConfig, subClass2Config.getParentEntityConfig());
@@ -154,7 +154,7 @@ public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
 //    Assert.assertTrue(subClass2Config.getIdProperty() instanceof InheritanceSubTableIdPropertyConfig);
 //    Assert.assertEquals(baseClassConfig.getIdProperty(), ((InheritanceSubTableIdPropertyConfig)subClass2Config.getIdProperty()).getInheritanceHierarchyTopLevelIdProperty());
     Assert.assertEquals(baseClassConfig, subClass2Config.getInheritanceTopLevelEntityConfig());
-    Assert.assertEquals(0, subClass2Config.getChildEntityConfigs().size());
+    Assert.assertEquals(0, subClass2Config.getSubClassEntityConfigs().size());
   }
 
 }

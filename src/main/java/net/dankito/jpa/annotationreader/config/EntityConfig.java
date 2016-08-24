@@ -9,7 +9,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,7 @@ public class EntityConfig<T, ID> {
   protected EntityConfig inheritanceTopLevelEntityConfig = null;
   protected EntityConfig parentEntityConfig = null;
   protected List<EntityConfig> topDownInheritanceHierarchy = null;
-  protected List<EntityConfig> childEntityConfigs = new ArrayList<>();
+  protected List<EntityConfig> subClassEntityConfigs = new ArrayList<>();
   protected InheritanceType inheritance = null;
 
   // Life Cycle Events
@@ -465,14 +464,14 @@ public class EntityConfig<T, ID> {
     return hierarchyList.toArray(new EntityConfig[hierarchyList.size()]);
   }
 
-  public List<EntityConfig> getChildEntityConfigs() {
-    return childEntityConfigs;
+  public List<EntityConfig> getSubClassEntityConfigs() {
+    return subClassEntityConfigs;
   }
 
-  public boolean addChildTableInfo(EntityConfig childEntityConfig) {
-    if(childEntityConfigs.contains(childEntityConfig) == false) {
-      childEntityConfig.setParentEntityConfig(this);
-      return childEntityConfigs.add(childEntityConfig);
+  public boolean addSubClassEntityConfig(EntityConfig subClassEntityConfig) {
+    if(subClassEntityConfigs.contains(subClassEntityConfig) == false) {
+      subClassEntityConfig.setParentEntityConfig(this);
+      return subClassEntityConfigs.add(subClassEntityConfig);
     }
     return false;
   }
