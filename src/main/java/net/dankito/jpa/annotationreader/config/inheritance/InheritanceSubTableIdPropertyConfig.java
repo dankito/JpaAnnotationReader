@@ -5,6 +5,9 @@ import net.dankito.jpa.annotationreader.config.DataType;
 import net.dankito.jpa.annotationreader.config.EntityConfig;
 import net.dankito.jpa.annotationreader.config.PropertyConfig;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 
 public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {
 
@@ -17,17 +20,13 @@ public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {
 
   }
 
-  public InheritanceSubTableIdPropertyConfig(EntityConfig subEntity, InheritanceEntityConfig inheritanceHierarchyEntity) {
+  public InheritanceSubTableIdPropertyConfig(EntityConfig subEntity, InheritanceEntityConfig inheritanceHierarchyEntity, PropertyConfig inheritanceHierarchyTopLevelIdProperty) {
     super(subEntity, "");
 
     this.inheritanceHierarchyEntity = inheritanceHierarchyEntity;
+    this.inheritanceHierarchyTopLevelIdProperty = inheritanceHierarchyTopLevelIdProperty;
   }
 
-
-  @Override
-  public boolean isGeneratedId() {
-    return false;
-  } // TODO: return parent value?
 
   @Override
   public String getColumnName() {
@@ -58,6 +57,11 @@ public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {
   }
 
   @Override
+  public boolean isGeneratedId() {
+    return getInheritanceHierarchyTopLevelIdProperty().isGeneratedIdSequence();
+  }
+
+  @Override
   public boolean isGeneratedIdSequence() {
     return getInheritanceHierarchyTopLevelIdProperty().isGeneratedIdSequence();
   }
@@ -65,6 +69,21 @@ public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {
   @Override
   public String getGeneratedIdSequence() {
     return getInheritanceHierarchyTopLevelIdProperty().getGeneratedIdSequence();
+  }
+
+  @Override
+  public Field getField() {
+    return getInheritanceHierarchyTopLevelIdProperty().getField();
+  }
+
+  @Override
+  public Method getFieldGetMethod() {
+    return getInheritanceHierarchyTopLevelIdProperty().getFieldGetMethod();
+  }
+
+  @Override
+  public Method getFieldSetMethod() {
+    return getInheritanceHierarchyTopLevelIdProperty().getFieldSetMethod();
   }
 
 
