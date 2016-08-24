@@ -33,6 +33,7 @@ public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID>
   protected List<EntityConfig> subEntities = new ArrayList<>();
   protected Map<String, EntityConfig> mapDiscriminatorValuesToSubEntities = new HashMap<>();
   protected Map<EntityConfig, String> mapSubEntitiesToDiscriminatorValues = new HashMap<>();
+  protected Map<Class, String> mapClassToDiscriminatorValues = new HashMap<>();
 
 
   protected InheritanceEntityConfig() { // for Reflection
@@ -74,8 +75,10 @@ public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID>
 
   protected void findAndStoreDiscriminatorValueForEntity(EntityConfig entity) throws SQLException {
     String discriminatorValue = determineEntityDiscriminatorValue(entity);
+
     mapDiscriminatorValuesToSubEntities.put(discriminatorValue, entity);
     mapSubEntitiesToDiscriminatorValues.put(entity, discriminatorValue);
+    mapClassToDiscriminatorValues.put(entity.getEntityClass(), discriminatorValue);
   }
 
   protected String determineEntityDiscriminatorValue(EntityConfig entity) throws SQLException {
@@ -105,6 +108,10 @@ public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID>
 
   public String getDiscriminatorValueForEntity(EntityConfig entity) {
     return mapSubEntitiesToDiscriminatorValues.get(entity);
+  }
+
+  public String getDiscriminatorValueForEntityClass(Class entityClass) {
+    return mapClassToDiscriminatorValues.get(entityClass);
   }
 
   protected PropertyConfig createDiscriminatorColumn(Class<?> tableClass) throws SQLException {
