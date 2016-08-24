@@ -46,9 +46,9 @@ public class JoinedEntityConfig<T, ID> extends InheritanceEntityConfig<T, ID> {
 
     EntityConfig entityConfigForDiscriminator = getEntityForDiscriminatorValue(discriminatorValue);
     if(entityConfigForDiscriminator == null)
-      log.error("Could not get EntityConfig for Discriminator value " + discriminatorValue + " of JoinedEntityConfig " + this);
+      log.error("Could not get EntityConfig for Discriminator value " + discriminatorValue + " of JoinedEntityConfig " + this); // TODO: shouldn't this throw an Exception instead?
     else {
-      for (EntityConfig subClassEntityConfig : (List<EntityConfig>) entityConfigForDiscriminator.getTopDownInheritanceHierarchy()) { // why is the cast needed?
+      for (EntityConfig subClassEntityConfig : entityConfigForDiscriminator.getTopDownInheritanceHierarchy()) {
         subClassPropertyConfigs.addAll(Arrays.asList(subClassEntityConfig.getProperties()));
       }
     }

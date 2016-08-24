@@ -448,7 +448,7 @@ public class EntityConfig<T, ID> {
     this.topDownInheritanceHierarchy = null;
   }
 
-  public List<EntityConfig> getTopDownInheritanceHierarchy() {
+  public List<EntityConfig> getTopDownInheritanceHierarchyList() {
     if(topDownInheritanceHierarchy == null) {
       topDownInheritanceHierarchy = new ArrayList<>();
       for(EntityConfig parentEntityConfig = this; parentEntityConfig != null; parentEntityConfig = parentEntityConfig.getParentEntityConfig()) {
@@ -457,6 +457,12 @@ public class EntityConfig<T, ID> {
     }
 
     return topDownInheritanceHierarchy;
+  }
+
+  public EntityConfig[] getTopDownInheritanceHierarchy() {
+    List<EntityConfig> hierarchyList = getTopDownInheritanceHierarchyList();
+
+    return hierarchyList.toArray(new EntityConfig[hierarchyList.size()]);
   }
 
   public List<EntityConfig> getChildEntityConfigs() {
