@@ -340,10 +340,6 @@ public class EntityConfig<T, ID> {
 	 * Return the id-field associated with the object.
 	 */
 	public PropertyConfig getIdProperty() {
-    if(idProperty == null) {
-      if(getParentEntityConfig() != null)
-        idProperty = getParentEntityConfig().getIdProperty();
-    }
 		return idProperty;
 	}
 
@@ -468,7 +464,7 @@ public class EntityConfig<T, ID> {
     return subClassEntityConfigs;
   }
 
-  public boolean addSubClassEntityConfig(EntityConfig subClassEntityConfig) {
+  public boolean addSubClassEntityConfig(EntityConfig subClassEntityConfig) throws SQLException {
     if(subClassEntityConfigs.contains(subClassEntityConfig) == false) {
       subClassEntityConfig.setParentEntityConfig(this);
       return subClassEntityConfigs.add(subClassEntityConfig);

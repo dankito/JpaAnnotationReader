@@ -58,19 +58,49 @@ public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID>
 
 
 
-  public void addInheritanceLevelSubEntities(List<EntityConfig> subEntitiesToAdd) throws SQLException {
-    for(EntityConfig subEntity : subEntitiesToAdd) {
-      if(this.subEntities.contains(subEntity) == false) {
-        findAndStoreDiscriminatorValueForEntity(subEntity);
-        subEntity.setInheritance(this.inheritance);
-        subEntity.setInheritanceTopLevelEntityConfig(this);
+  @Override
+  public void setIdProperty(PropertyConfig idProperty) throws SQLException {
+    super.setIdProperty(idProperty);
 
-        this.subEntities.add(subEntity);
-
-        if(inheritance == InheritanceType.JOINED)
-          subEntity.addProperty(new InheritanceSubTableIdPropertyConfig(subEntity, this));
+    for(EntityConfig subClassEntityConfig : getSubClassEntityConfigs()) {
+      if(subClassEntityConfig.getIdProperty() == null) {
+        setIdOnSubClassEntityConfig(subClassEntityConfig, idProperty);
       }
     }
+  }
+
+  protected void setIdOnSubClassEntityConfig(EntityConfig subClassEntityConfig, PropertyConfig idProperty) throws SQLException {
+    // TODO: really add also to SingleTable and TablePerClass sub classes or only to JoinedTable ones?
+    if(getInheritance() == InheritanceType.JOINED) {
+      subClassEntityConfig.addProperty(new InheritanceSubTableIdPropertyConfig(subClassEntityConfig, this, idProperty));
+    }
+    else {
+      subClassEntityConfig.setIdProperty(idProperty);
+    }
+  }
+
+  public void addInheritanceLevelSubEntities(List<EntityConfig> subEntitiesToAdd) throws SQLException {
+    for(EntityConfig subClassEntityConfig : subEntitiesToAdd) {
+      this.addSubClassEntityConfig(subClassEntityConfig);
+    }
+  }
+
+  @Override
+  public boolean addSubClassEntityConfig(EntityConfig subClassEntityConfig) throws SQLException {
+    if(super.addSubClassEntityConfig(subClassEntityConfig)) {
+      subClassEntityConfig.setInheritance(this.inheritance);
+      subClassEntityConfig.setInheritanceTopLevelEntityConfig(this);
+
+      if(getIdProperty() != null) {
+        setIdOnSubClassEntityConfig(subClassEntityConfig, getIdProperty());
+      }
+
+      findAndStoreDiscriminatorValueForEntity(subClassEntityConfig);
+
+      return true;
+    }
+
+    return false;
   }
 
   protected void findAndStoreDiscriminatorValueForEntity(EntityConfig entity) throws SQLException {

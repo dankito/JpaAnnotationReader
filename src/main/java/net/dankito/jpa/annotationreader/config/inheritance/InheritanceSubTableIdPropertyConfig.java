@@ -30,8 +30,6 @@ public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {
 
   @Override
   public String getColumnName() {
-    if(getInheritanceHierarchyTopLevelIdProperty() == null)
-      return "id"; // TODO: this is a very bad work around (as on addProperty top level id property is forseeable still null), try to find a better solution
     return getInheritanceHierarchyTopLevelIdProperty().getColumnName();
   }
 
