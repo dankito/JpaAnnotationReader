@@ -25,6 +25,9 @@ public class InheritanceSubTableIdPropertyConfig extends PropertyConfig {
 
     this.inheritanceHierarchyEntity = inheritanceHierarchyEntity;
     this.inheritanceHierarchyTopLevelIdProperty = inheritanceHierarchyTopLevelIdProperty;
+
+    this.type = inheritanceHierarchyTopLevelIdProperty.getType();
+    this.sqlType = inheritanceHierarchyTopLevelIdProperty.getSqlType();
   }
 
 
