@@ -622,8 +622,9 @@ public class JpaPropertyConfigurationReader {
     String name = (String)elements.get("name");
     String columnDefinition = (String)elements.get("columnDefinition");
 
-    if (StringHelper.isNotNullOrEmpty(name))
-      propertyConfig.setColumnName(name);
+    // TODO: this is for sure wrong as e.g. Entry has more than one ManyToMany field which's joinColumn name is set to entry_id -> they block each other
+//    if (StringHelper.isNotNullOrEmpty(name))
+//      propertyConfig.setColumnName(name);
     if(StringHelper.isNotNullOrEmpty(columnDefinition))
       propertyConfig.setColumnDefinition(columnDefinition);
 
