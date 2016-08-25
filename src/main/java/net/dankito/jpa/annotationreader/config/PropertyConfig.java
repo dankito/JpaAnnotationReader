@@ -165,6 +165,10 @@ public class PropertyConfig {
     return typeIsACollection;
   }
 
+  public boolean isEnumType() {
+    return type.isEnum();
+  }
+
   public Class getSqlType() {
     return sqlType;
   }
