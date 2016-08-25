@@ -276,11 +276,20 @@ public class JpaPropertyConfigurationReader {
     }
   }
 
-  protected void readVersionConfiguration(Property property, PropertyConfig propertyConfig, EntityConfig entityConfig) {
+  protected void readVersionConfiguration(Property property, PropertyConfig propertyConfig, EntityConfig entityConfig) throws SQLException {
     if(isAnnotationPresent(property, Version.class)) {
+      if(isValidDataTypeForVersion(propertyConfig.getType()) == false) {
+        throw new SQLException("Data Type for @Version property " + propertyConfig + " must be one of these types: int, Integer, short, Short, long, Long, java.sql.Timestamp.");
+      }
+
       propertyConfig.setIsVersion(true);
       entityConfig.setVersionProperty(propertyConfig);
     }
+  }
+
+  protected boolean isValidDataTypeForVersion(Class type) { // according to http://www.objectdb.com/api/java/jpa/Version
+    return long.class.equals(type) || Long.class.equals(type) || int.class.equals(type) || Integer.class.equals(type) ||
+            short.class.equals(type) || Short.class.equals(type) || java.sql.Timestamp.class.equals(type);
   }
 
   protected void readBasicAnnotation(Property property, PropertyConfig propertyConfig) throws SQLException{
