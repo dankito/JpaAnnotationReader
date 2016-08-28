@@ -467,7 +467,7 @@ public class EntityConfig<T, ID> {
 
   public Class[] getParentEntityClasses() {
     List<EntityConfig> parentEntities = getTopDownInheritanceHierarchyList();
-    Class[] parentEntityClasses = new Class[parentEntities.size()];
+    Class[] parentEntityClasses = new Class[parentEntities.size() - 1]; // -1 because last entity is this entity
 
     for(int i = 0; i < parentEntityClasses.length; i++) {
       parentEntityClasses[i] = parentEntities.get(i).getEntityClass();
