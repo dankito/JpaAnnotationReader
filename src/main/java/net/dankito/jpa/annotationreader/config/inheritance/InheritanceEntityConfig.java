@@ -79,6 +79,21 @@ public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID>
     }
   }
 
+  @Override
+  public void setVersionProperty(PropertyConfig versionProperty) {
+    super.setVersionProperty(versionProperty);
+
+    for(EntityConfig subClassEntityConfig : getSubClassEntityConfigs()) {
+      if(subClassEntityConfig.getVersionProperty() == null) {
+        setVersionPropertyOnSubClassEntityConfig(subClassEntityConfig, versionProperty);
+      }
+    }
+  }
+
+  protected void setVersionPropertyOnSubClassEntityConfig(EntityConfig subClassEntityConfig, PropertyConfig versionProperty) {
+    subClassEntityConfig.setVersionProperty(versionProperty);
+  }
+
   public void addInheritanceLevelSubEntities(List<EntityConfig> subEntitiesToAdd) throws SQLException {
     for(EntityConfig subClassEntityConfig : subEntitiesToAdd) {
       this.addSubClassEntityConfig(subClassEntityConfig);
@@ -93,6 +108,10 @@ public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID>
 
       if(getIdProperty() != null) {
         setIdOnSubClassEntityConfig(subClassEntityConfig, getIdProperty());
+      }
+
+      if(getVersionProperty() != null) {
+        setVersionPropertyOnSubClassEntityConfig(subClassEntityConfig, getVersionProperty());
       }
 
       findAndStoreDiscriminatorValueForEntity(subClassEntityConfig);
