@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Index;
 import javax.persistence.InheritanceType;
 import javax.persistence.UniqueConstraint;
@@ -44,6 +45,7 @@ public class EntityConfig<T, ID> {
   protected AccessType access = null;
 	protected List<PropertyConfig> propertyConfigs = new ArrayList<>();
   protected Map<String, PropertyConfig> propertyConfigsColumnNames = new HashMap<>(); // TODO: merge with propertyConfigs
+  protected List<PropertyConfig> propertyConfigsIncludingInheritedOnes = null;
 
 	protected List<PropertyConfig> collectionProperties = new ArrayList<>();
   protected List<PropertyConfig> joinColumns = null;
@@ -173,68 +175,64 @@ public class EntityConfig<T, ID> {
 	 * Return the array of field types associated with the object.
 	 */
 	public PropertyConfig[] getProperties() {
-		return propertyConfigs.toArray(new PropertyConfig[0]); // do not return mutable List<PropertyConfig> instance
+		return propertyConfigs.toArray(new PropertyConfig[propertyConfigs.size()]); // do not return mutable List<PropertyConfig> instance
 	}
+  public PropertyConfig[] getPropertiesIncludingInheritedOnes() {
+    if(propertyConfigsIncludingInheritedOnes == null) {
+      propertyConfigsIncludingInheritedOnes = determinePropertiesIncludingInheritedOnes();
+    }
+
+    return propertyConfigsIncludingInheritedOnes.toArray(new PropertyConfig[propertyConfigsIncludingInheritedOnes.size()]); // do not return mutable List<PropertyConfig> instance
+  }
+
+  protected List<PropertyConfig> determinePropertiesIncludingInheritedOnes() {
+    List<PropertyConfig> propertiesIncludingInheritedOnes = new ArrayList<>();
+    propertiesIncludingInheritedOnes.addAll(propertyConfigs);
+
+    EntityConfig parentEntity = getParentEntityConfig();
+
+    while(parentEntity != null) {
+      propertiesIncludingInheritedOnes.addAll(parentEntity.propertyConfigs);
+
+      parentEntity = parentEntity.getParentEntityConfig();
+    }
+
+    return propertiesIncludingInheritedOnes;
+  }
+
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadePersist() {
     // TODO: cache this info (and reset cache when adding item to propertyConfigs) so that we don't loose CPU time on each call to getRelationshipPropertiesWithCascadePersist()
-    List<PropertyConfig> cascadePersistRelationshipProperties = new ArrayList<>();
-
-    for(PropertyConfig property : propertyConfigs) {
-      if(property.isRelationshipProperty() && property.cascadePersist()) {
-        cascadePersistRelationshipProperties.add(property);
-      }
-    }
-
-    return cascadePersistRelationshipProperties.toArray(new PropertyConfig[cascadePersistRelationshipProperties.size()]);
+    return getRelationshipPropertiesWithCascade(CascadeType.PERSIST, false);
   }
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadeMerge() {
-    List<PropertyConfig> cascadeMergeRelationshipProperties = new ArrayList<>();
-
-    for(PropertyConfig property : propertyConfigs) {
-      if(property.isRelationshipProperty() && property.cascadeMerge()) {
-        cascadeMergeRelationshipProperties.add(property);
-      }
-    }
-
-    return cascadeMergeRelationshipProperties.toArray(new PropertyConfig[cascadeMergeRelationshipProperties.size()]);
+    return getRelationshipPropertiesWithCascade(CascadeType.MERGE, false);
   }
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadeRefresh() {
-    List<PropertyConfig> cascadeRefreshRelationshipProperties = new ArrayList<>();
-
-    for(PropertyConfig property : propertyConfigs) {
-      if(property.isRelationshipProperty() && property.cascadeRefresh()) {
-        cascadeRefreshRelationshipProperties.add(property);
-      }
-    }
-
-    return cascadeRefreshRelationshipProperties.toArray(new PropertyConfig[cascadeRefreshRelationshipProperties.size()]);
+    return getRelationshipPropertiesWithCascade(CascadeType.REFRESH, false);
   }
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadeDetach() {
-    List<PropertyConfig> cascadeDetachRelationshipProperties = new ArrayList<>();
-
-    for(PropertyConfig property : propertyConfigs) {
-      if(property.isRelationshipProperty() && property.cascadeDetach()) {
-        cascadeDetachRelationshipProperties.add(property);
-      }
-    }
-
-    return cascadeDetachRelationshipProperties.toArray(new PropertyConfig[cascadeDetachRelationshipProperties.size()]);
+    return getRelationshipPropertiesWithCascade(CascadeType.DETACH, false);
   }
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadeRemove() {
-    List<PropertyConfig> cascadeRemoveRelationshipProperties = new ArrayList<>();
+    return getRelationshipPropertiesWithCascade(CascadeType.REMOVE, false);
+  }
 
-    for(PropertyConfig property : propertyConfigs) {
-      if(property.isRelationshipProperty() && property.cascadeRemove()) {
-        cascadeRemoveRelationshipProperties.add(property);
+  protected PropertyConfig[] getRelationshipPropertiesWithCascade(CascadeType cascadeType, boolean includeInheritedProperties) {
+    List<PropertyConfig> cascadedRelationshipProperties = new ArrayList<>();
+    PropertyConfig[] propertiesToTest = includeInheritedProperties ? getPropertiesIncludingInheritedOnes() : getProperties();
+
+    for(PropertyConfig property : propertiesToTest) {
+      if(property.isRelationshipProperty() && property.hasCascade(cascadeType)) {
+        cascadedRelationshipProperties.add(property);
       }
     }
 
-    return cascadeRemoveRelationshipProperties.toArray(new PropertyConfig[cascadeRemoveRelationshipProperties.size()]);
+    return cascadedRelationshipProperties.toArray(new PropertyConfig[cascadedRelationshipProperties.size()]);
   }
 
   public PropertyConfig[] getPropertiesWithoutCollectionProperties() {

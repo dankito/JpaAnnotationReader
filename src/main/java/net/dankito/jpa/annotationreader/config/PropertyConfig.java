@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -524,6 +525,23 @@ public class PropertyConfig {
     return isForeignAutoCreate;
   }
 
+
+  public boolean hasCascade(CascadeType cascadeType) {
+    switch(cascadeType) {
+      case PERSIST:
+        return cascadePersist();
+      case MERGE:
+        return cascadeMerge();
+      case REFRESH:
+        return cascadeRefresh();
+      case DETACH:
+        return cascadeDetach();
+      case REMOVE:
+        return cascadeRemove();
+      default:
+        return false;
+    }
+  }
 
   public boolean cascadePersist() {
     if(cascadePersist == null) {
