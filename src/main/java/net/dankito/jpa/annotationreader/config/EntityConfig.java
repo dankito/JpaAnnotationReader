@@ -206,20 +206,40 @@ public class EntityConfig<T, ID> {
     return getRelationshipPropertiesWithCascade(CascadeType.PERSIST, false);
   }
 
+  public PropertyConfig[] getRelationshipPropertiesWithCascadePersistIncludingInheritedOnes() {
+    return getRelationshipPropertiesWithCascade(CascadeType.PERSIST, true);
+  }
+
   public PropertyConfig[] getRelationshipPropertiesWithCascadeMerge() {
     return getRelationshipPropertiesWithCascade(CascadeType.MERGE, false);
+  }
+
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeMergeIncludingInheritedOnes() {
+    return getRelationshipPropertiesWithCascade(CascadeType.MERGE, true);
   }
 
   public PropertyConfig[] getRelationshipPropertiesWithCascadeRefresh() {
     return getRelationshipPropertiesWithCascade(CascadeType.REFRESH, false);
   }
 
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeRefreshIncludingInheritedOnes() {
+    return getRelationshipPropertiesWithCascade(CascadeType.REFRESH, true);
+  }
+
   public PropertyConfig[] getRelationshipPropertiesWithCascadeDetach() {
     return getRelationshipPropertiesWithCascade(CascadeType.DETACH, false);
   }
 
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeDetachIncludingInheritedOnes() {
+    return getRelationshipPropertiesWithCascade(CascadeType.DETACH, true);
+  }
+
   public PropertyConfig[] getRelationshipPropertiesWithCascadeRemove() {
     return getRelationshipPropertiesWithCascade(CascadeType.REMOVE, false);
+  }
+
+  public PropertyConfig[] getRelationshipPropertiesWithCascadeRemoveIncludingInheritedOnes() {
+    return getRelationshipPropertiesWithCascade(CascadeType.REMOVE, true);
   }
 
   protected PropertyConfig[] getRelationshipPropertiesWithCascade(CascadeType cascadeType, boolean includeInheritedProperties) {
