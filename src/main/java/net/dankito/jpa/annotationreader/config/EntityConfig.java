@@ -452,6 +452,10 @@ public class EntityConfig<T, ID> {
     this.inheritanceTopLevelEntityConfig = inheritanceTopLevelEntityConfig;
   }
 
+  public boolean hasParentEntityConfig() {
+    return parentEntityConfig != null;
+  }
+
   public EntityConfig getParentEntityConfig() {
     return parentEntityConfig;
   }
@@ -459,6 +463,17 @@ public class EntityConfig<T, ID> {
   public void setParentEntityConfig(EntityConfig parentEntityConfig) {
     this.parentEntityConfig = parentEntityConfig;
     this.topDownInheritanceHierarchy = null;
+  }
+
+  public Class[] getParentEntityClasses() {
+    List<EntityConfig> parentEntities = getTopDownInheritanceHierarchyList();
+    Class[] parentEntityClasses = new Class[parentEntities.size()];
+
+    for(int i = 0; i < parentEntityClasses.length; i++) {
+      parentEntityClasses[i] = parentEntities.get(i).getEntityClass();
+    }
+
+    return parentEntityClasses;
   }
 
   public List<EntityConfig> getTopDownInheritanceHierarchyList() {
