@@ -270,12 +270,12 @@ public class EntityConfig<T, ID> {
 	/**
 	 * Return the {@link PropertyConfig} associated with the columnName.
 	 */
-	public PropertyConfig getFieldTypeByColumnName(String columnName) {
+	public PropertyConfig getPropertyByColumnName(String columnName) {
     columnName = columnName.toUpperCase();
     if(propertyConfigsColumnNames.containsKey(columnName))
       return propertyConfigsColumnNames.get(columnName);
     else if(parentEntityConfig != null) {
-      PropertyConfig propertyFromParentEntity = parentEntityConfig.getFieldTypeByColumnName(columnName);
+      PropertyConfig propertyFromParentEntity = parentEntityConfig.getPropertyByColumnName(columnName);
       if(propertyFromParentEntity != null)
         return propertyFromParentEntity;
     }
