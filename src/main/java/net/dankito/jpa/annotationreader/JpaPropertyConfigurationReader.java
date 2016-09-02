@@ -71,20 +71,15 @@ public class JpaPropertyConfigurationReader {
 
 
   public <T, ID> void readEntityPropertiesConfiguration(EntityConfig<T, ID> entityConfig) throws SQLException {
-    // TODO: either remove or implement configureIdProperty
-//    Property idProperty = findIdProperty(entityConfig); // advantages of this method is it finds the Id property also in parent @Entity classes - but do i need this?
-//    if(idProperty == null)
-//      throw new SQLException("@Id not set on any Field or Method of Entity " + entityConfig.getEntityClass() + " or one of its @MappedSuperClass or @Entity super classes");
-
-    // TODO: configure Id property
-//    configureIdProperty()
-
     for(Property entityProperty : ReflectionHelper.getEntityPersistableProperties(entityConfig.getEntityClass())) {
-      if(configRegistry.hasPropertyConfiguration(entityConfig.getEntityClass(), entityProperty) == true) // potentially dangerous as Properties on Parent classes
-        // can be on multiple Entities, but its EntityConfig value is only set to first Entity's config
-        entityConfig.addProperty(configRegistry.getPropertyConfiguration(entityConfig.getEntityClass(), entityProperty));
-      else
+      PropertyConfig cachedPropertyConfig = configRegistry.getPropertyConfiguration(entityProperty);
+
+      if(cachedPropertyConfig != null) {
+        entityConfig.addProperty(cachedPropertyConfig);
+      }
+      else {
         entityConfig.addProperty(readPropertyConfiguration(entityConfig, entityProperty));
+      }
     }
   }
 
@@ -136,7 +131,7 @@ public class JpaPropertyConfigurationReader {
   protected PropertyConfig readPropertyConfiguration(EntityConfig entityConfig, Property property) throws SQLException {
     PropertyConfig propertyConfig = new PropertyConfig(entityConfig, property, configRegistry);
 
-    configRegistry.registerPropertyConfiguration(entityConfig.getEntityClass(), property, propertyConfig);
+    configRegistry.registerPropertyConfiguration(property, propertyConfig);
 
     setSqlType(property, propertyConfig);
     readIdConfiguration(property, propertyConfig, entityConfig);
@@ -869,24 +864,27 @@ public class JpaPropertyConfigurationReader {
     if(orderColumnFieldName != null) {
       Property orderByProperty = ReflectionHelper.findPropertyByName(targetEntityClass, orderColumnFieldName);
       if(orderByProperty != null) {
-        if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByProperty)) {
-          PropertyConfig orderByTargetProperty = configRegistry.getPropertyConfiguration(targetEntityClass, orderByProperty); // TODO: this is not completely correct as
-          // Database may affords Upper Case column names
-          return new OrderByConfig(orderByTargetProperty, ascending);
+        PropertyConfig cachedPropertyConfig = configRegistry.getPropertyConfiguration(orderByProperty);
+
+        if(cachedPropertyConfig != null) {
+          return new OrderByConfig(cachedPropertyConfig, ascending); // TODO: this is not completely correct as Database may affords Upper Case column names
         }
-        else // column not yet configured (that means its Entity configuration hasn't been read yet)
+        else {// column not yet configured (that means its Entity configuration hasn't been read yet)
           return new OrderByConfig(targetEntityClass, orderByProperty, ascending, configRegistry); // -> save Property for later column name retrieval // TODO: dito
+        }
       }
     }
 
     Property idProperty = findIdProperty(targetEntityClass); // if column name for OrderBy is not set, entities get per default sorted by their Ids
     if(idProperty != null) { // actually this should never be the case for an entity
-      if(configRegistry.hasPropertyConfiguration(targetEntityClass, idProperty)) {
-        PropertyConfig orderByTargetProperty = configRegistry.getPropertyConfiguration(targetEntityClass, idProperty);
-        return new OrderByConfig(orderByTargetProperty, ascending);
+      PropertyConfig cachedPropertyConfig = configRegistry.getPropertyConfiguration(idProperty);
+
+      if(cachedPropertyConfig != null) {
+        return new OrderByConfig(cachedPropertyConfig, ascending);
       }
-      else
+      else {
         return new OrderByConfig(targetEntityClass, idProperty, ascending, configRegistry);
+      }
     }
 
     throw new SQLException("Could not find column for OrderBy string '" + orderByString + "' mapped to class " + targetEntityClass);

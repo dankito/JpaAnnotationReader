@@ -110,21 +110,25 @@ public class ConfigRegistry {
 
 
   public boolean hasPropertyConfiguration(Class declaringClass, Property property) {
-//    return mapPropertyToPropertyConfig.containsKey(property);
     return mapPropertyToPropertyConfig.containsKey(declaringClass) && mapPropertyToPropertyConfig.get(declaringClass).containsKey(property);
   }
 
-  public boolean registerPropertyConfiguration(Class declaringClass, Property property, PropertyConfig propertyConfiguration) {
+  public boolean registerPropertyConfiguration(Property property, PropertyConfig propertyConfiguration) {
+    Class declaringClass = property.getDeclaringClass();
+
     if(hasPropertyConfiguration(declaringClass, property) == false) {
-      if(mapPropertyToPropertyConfig.containsKey(declaringClass) == false)
+      if(mapPropertyToPropertyConfig.containsKey(declaringClass) == false) {
         mapPropertyToPropertyConfig.put(declaringClass, new HashMap<Property, PropertyConfig>());
+      }
 
       mapPropertyToPropertyConfig.get(declaringClass).put(property, propertyConfiguration);
 
-      if(property.getField() != null)
+      if(property.getField() != null) {
         mapFieldToProperty.put(property.getField(), property);
-      if(property.getGetMethod() != null)
+      }
+      if(property.getGetMethod() != null) {
         mapGetMethodToProperty.put(property.getGetMethod(), property);
+      }
 
       return true;
     }
@@ -132,10 +136,15 @@ public class ConfigRegistry {
     return false;
   }
 
+  public PropertyConfig getPropertyConfiguration(Property property) {
+    return getPropertyConfiguration(property.getDeclaringClass(), property);
+  }
+
   public PropertyConfig getPropertyConfiguration(Class declaringClass, Property property) {
     Map<Property, PropertyConfig> classProperties = mapPropertyToPropertyConfig.get(declaringClass);
-    if(classProperties != null)
+    if(classProperties != null) {
       return classProperties.get(property);
+    }
 
     return null;
   }
@@ -143,12 +152,6 @@ public class ConfigRegistry {
 
   public boolean hasPropertyForField(Field field) {
     return mapFieldToProperty.containsKey(field);
-  }
-
-  public boolean hasPropertyConfiguration(Field field) {
-    if(hasPropertyForField(field))
-      return hasPropertyConfiguration(field.getDeclaringClass(), getPropertyForField(field));
-    return false;
   }
 
   public Property getPropertyForField(Field field) {
@@ -164,12 +167,6 @@ public class ConfigRegistry {
 
   public boolean hasPropertyForGetMethod(Method getMethod) {
     return mapGetMethodToProperty.containsKey(getMethod);
-  }
-
-  public boolean hasPropertyConfiguration(Method getMethod) {
-    if(hasPropertyForGetMethod(getMethod))
-      return hasPropertyConfiguration(getMethod.getDeclaringClass(), getPropertyForGetMethod(getMethod));
-    return false;
   }
 
   public Property getPropertyForGetMethod(Method getMethod) {

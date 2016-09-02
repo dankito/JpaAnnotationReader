@@ -133,8 +133,9 @@ public class ReflectionHelper {
    * @return
    */
   public static List<Property> getEntityPersistableProperties(Class entityClass) {
-    if(mapExtractedEntityProperties.containsKey(entityClass))
+    if(mapExtractedEntityProperties.containsKey(entityClass)) {
       return mapExtractedEntityProperties.get(entityClass);
+    }
 
     List<Property> persistableProperties = new ArrayList<>();
 
@@ -143,8 +144,9 @@ public class ReflectionHelper {
 
     for(Field persistableField : persistableFields) {
       Method getMethod = findGetMethod(persistableField, persistableGetMethods);
-      if(getMethod != null)
+      if(getMethod != null) {
         persistableGetMethods.remove(getMethod.getName());
+      }
 
       if(isNonFinalNonStaticNonTransientField(persistableField) && (getMethod == null || isNonFinalNonStaticNonAbstractMethod(getMethod))) {
         Property property = findPropertyForField(persistableField, getMethod);

@@ -49,8 +49,10 @@ public class OrderByConfig {
 
   public PropertyConfig getOrderByTargetProperty() {
     if(orderByTargetProperty == null) {
-      if(configRegistry.hasPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn)) {
-        this.orderByTargetProperty = configRegistry.getPropertyConfiguration(targetEntityClass, orderByPropertyForNotYetLoadedOrderByColumn);
+      PropertyConfig cachedPropertyConfig = configRegistry.getPropertyConfiguration(orderByPropertyForNotYetLoadedOrderByColumn);
+
+      if(cachedPropertyConfig != null) {
+        this.orderByTargetProperty = cachedPropertyConfig;
 
         this.configRegistry = null; // ConfigRegistry is then not needed anymore -> we can release it
         this.targetEntityClass = null;

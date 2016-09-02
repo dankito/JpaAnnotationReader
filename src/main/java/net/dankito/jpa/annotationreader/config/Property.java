@@ -22,6 +22,8 @@ public class Property {
   protected Method getMethod;
   protected Method setMethod;
 
+  protected Class declaringClass = null;
+
   protected transient Map<Class<? extends Annotation>, AnnotationPlacement> mapFoundAnnotations = new HashMap<>();
   protected transient List<Class<? extends Annotation>> listNotAvailableAnnotations = new ArrayList<>();
   protected transient Map<Class<? extends Annotation>, Annotation> mapExtractedAnnotationInstances = new HashMap<>();
@@ -83,17 +85,19 @@ public class Property {
   }
 
   public Class getDeclaringClass() {
-    if(field != null)
-      return field.getDeclaringClass();
-
-    if(getMethod != null) {
-      return getMethod.getDeclaringClass();
+    if(declaringClass == null) {
+      if(field != null) {
+        declaringClass = field.getDeclaringClass();
+      }
+      else if(getMethod != null) {
+        declaringClass = getMethod.getDeclaringClass();
+      }
+      else if(setMethod != null) {
+        declaringClass = setMethod.getDeclaringClass();
+      }
     }
 
-    if(setMethod != null)
-      return setMethod.getDeclaringClass();
-
-    return null; // should never come to this
+    return declaringClass;
   }
 
   public String getFieldName() {
