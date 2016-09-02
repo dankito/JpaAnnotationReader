@@ -133,8 +133,9 @@ public class ReflectionHelper {
    * @return
    */
   public static List<Property> getEntityPersistableProperties(Class entityClass) {
-    if(mapExtractedEntityProperties.containsKey(entityClass)) {
-      return mapExtractedEntityProperties.get(entityClass);
+    List<Property> cachedProperties = mapExtractedEntityProperties.get(entityClass);
+    if(cachedProperties != null) {
+      return cachedProperties;
     }
 
     List<Property> persistableProperties = new ArrayList<>();
