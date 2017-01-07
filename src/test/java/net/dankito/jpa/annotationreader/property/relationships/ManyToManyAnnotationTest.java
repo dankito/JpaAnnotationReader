@@ -4,6 +4,7 @@ import net.dankito.jpa.annotationreader.config.PropertyConfig;
 import net.dankito.jpa.annotationreader.JpaConfigurationReaderTestBase;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -26,6 +27,7 @@ public class ManyToManyAnnotationTest extends JpaConfigurationReaderTestBase {
     protected Collection<OwningSideUnAnnotated> inverseSides;
   }
 
+  @Ignore
   @Test(expected = SQLException.class)
   public void manyToManyAnnotationNotSet_ExceptionIsThrownTypeCannotBeSerialized() throws SQLException, NoSuchFieldException {
     entityConfigurationReader.readConfiguration(new Class[] { OwningSideUnAnnotated.class });
