@@ -676,7 +676,7 @@ public class JpaPropertyConfigurationReader {
     else { // ok, this means relation is not bidirectional
       configureUnidirectionalOneToManyField(property, propertyConfig, targetEntityClass, fetch, cascade);
       // TODO: unidirectional means we have to create a Join Table, this case is not supported yet
-      throw new SQLException("Sorry, but unidirectional @OneToMany associations as for property " + property + " are not supported yet by this implementation. Please add a @ManyToOne field on the many side.");
+//      throw new SQLException("Sorry, but unidirectional @OneToMany associations as for property " + property + " are not supported yet by this implementation. Please add a @ManyToOne field on the many side.");
     }
 
     readOrderByAnnotation(property, propertyConfig, targetEntityClass);
