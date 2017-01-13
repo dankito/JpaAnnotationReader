@@ -79,6 +79,8 @@ public class PropertyConfig {
 
   protected boolean isVersion = false;
 
+  protected boolean isLob = false;
+
   protected boolean isRelationshipProperty = false;
   protected boolean isOneCardinalityRelationshipProperty = false;
   protected boolean isManyCardinalityRelationshipProperty = false;
@@ -497,6 +499,14 @@ public class PropertyConfig {
 
   public void setIsVersion(boolean isVersion) {
     this.isVersion = isVersion;
+  }
+
+  public boolean isLob() {
+    return isLob;
+  }
+
+  public void setIsLob(boolean lob) {
+    isLob = lob;
   }
 
   public void setOrderColumns(List<OrderByConfig> orderColumns) {
