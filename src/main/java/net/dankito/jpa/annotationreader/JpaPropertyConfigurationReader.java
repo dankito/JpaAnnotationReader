@@ -162,6 +162,7 @@ public class JpaPropertyConfigurationReader {
       // TODO: configure Lob field; set settings according to p. 39/40
     else if(isAnnotationPresent(property, Lob.class)) {
       propertyConfig.setIsLob(true);
+      // TODO: A Lob may be either a binary or character type. -> assert that it's really a binary (or character) type
 
       if(String.class.isAssignableFrom(property.getType()) || char[].class.isAssignableFrom(property.getType()) || Character[].class.isAssignableFrom(property.getType())) {
         propertyConfig.setDataType(DataType.STRING);
