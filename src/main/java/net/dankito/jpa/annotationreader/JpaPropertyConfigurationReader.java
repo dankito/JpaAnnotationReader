@@ -161,8 +161,8 @@ public class JpaPropertyConfigurationReader {
 //      propertyConfig.setDataType(DataType.BOOLEAN);
       // TODO: configure Lob field; set settings according to p. 39/40
     else if(isAnnotationPresent(property, Lob.class)) {
-//      DatabaseType databaseType = propertyConfig.getEntityConfig().getDatabaseType();
-//      if()
+      propertyConfig.setIsLob(true);
+
       if(String.class.isAssignableFrom(property.getType()) || char[].class.isAssignableFrom(property.getType()) || Character[].class.isAssignableFrom(property.getType())) {
         propertyConfig.setDataType(DataType.STRING);
         propertyConfig.setColumnDefinition("longvarchar");
