@@ -499,7 +499,6 @@ public class EntityConfig<T, ID> {
 
   public boolean addSubClassEntityConfig(EntityConfig subClassEntityConfig) throws SQLException {
     if(subClassEntityConfigs.contains(subClassEntityConfig) == false) {
-      subClassEntityConfig.setParentEntityConfig(this);
       return subClassEntityConfigs.add(subClassEntityConfig);
     }
     return false;

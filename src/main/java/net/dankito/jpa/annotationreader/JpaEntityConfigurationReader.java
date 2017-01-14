@@ -125,8 +125,10 @@ public class JpaEntityConfigurationReader {
         currentEntityConfig = getCachedOrCreateNewEntityConfig(classWalk, currentInheritanceTypeSubEntities);
         currentInheritanceTypeSubEntities.add(currentEntityConfig);
 
-        if(previousEntityConfig != null)
+        if(previousEntityConfig != null) {
+          previousEntityConfig.setParentEntityConfig(currentEntityConfig);
           currentEntityConfig.addSubClassEntityConfig(previousEntityConfig);
+        }
 
         previousEntityConfig = currentEntityConfig;
       }
