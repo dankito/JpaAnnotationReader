@@ -10,8 +10,10 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -66,7 +68,7 @@ public class EntityConfig<T, ID> {
   protected EntityConfig inheritanceTopLevelEntityConfig = null;
   protected EntityConfig parentEntityConfig = null;
   protected List<EntityConfig> topDownInheritanceHierarchy = null;
-  protected List<EntityConfig> subClassEntityConfigs = new ArrayList<>();
+  protected Set<EntityConfig> subClassEntityConfigs = new HashSet<>();
   protected InheritanceType inheritance = null;
 
   // Life Cycle Events
@@ -494,14 +496,11 @@ public class EntityConfig<T, ID> {
   }
 
   public List<EntityConfig> getSubClassEntityConfigs() {
-    return subClassEntityConfigs;
+    return new ArrayList<>(subClassEntityConfigs);
   }
 
   public boolean addSubClassEntityConfig(EntityConfig subClassEntityConfig) throws SQLException {
-    if(subClassEntityConfigs.contains(subClassEntityConfig) == false) {
-      return subClassEntityConfigs.add(subClassEntityConfig);
-    }
-    return false;
+    return subClassEntityConfigs.add(subClassEntityConfig);
   }
 
   public InheritanceType getInheritance() {
