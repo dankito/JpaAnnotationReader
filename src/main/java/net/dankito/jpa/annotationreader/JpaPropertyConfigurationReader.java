@@ -129,6 +129,8 @@ public class JpaPropertyConfigurationReader {
   }
 
   protected PropertyConfig readPropertyConfiguration(EntityConfig entityConfig, Property property) throws SQLException {
+    // TODO: we need to introduce EntityConfigs for mapped super classes as otherwise properties on mapped super classes are said to be on this EntityConfig
+//    Class declaringClass = property.getDeclaringClass();
     PropertyConfig propertyConfig = new PropertyConfig(entityConfig, property, configRegistry);
 
     configRegistry.registerPropertyConfiguration(property, propertyConfig);
