@@ -165,8 +165,16 @@ public class ReflectionHelper {
       persistableGetMethods.remove(getMethod.getName());
     }
 
-    if(isNonFinalNonStaticNonTransientField(persistableField) && (getMethod == null || isNonFinalNonStaticNonAbstractMethod(getMethod))) {
+    if(isNonStaticNonTransientField(persistableField) && (getMethod == null || isNonStaticNonAbstractMethod(getMethod))) {
       Property property = findPropertyForField(persistableField, getMethod);
+
+      if(isFinalField(persistableField)) { // field can be final as long there's a getter and setter for it
+        if(getMethod == null || property.getSetMethod() == null) {
+          return;
+        }
+        property.setHasFinalField(true);
+      }
+
       extractPropertyAnnotations(property);
       persistableProperties.add(property);
       foundProperty(entityClass, property.getFieldName(), property);
@@ -418,8 +426,8 @@ public class ReflectionHelper {
     }
   }
 
-  public static boolean isNonFinalNonStaticNonTransientField(Field field) {
-    return isFinalField(field) == false && isStaticField(field) == false && isTransientField(field) == false && field.isAnnotationPresent(Transient.class) == false;
+  public static boolean isNonStaticNonTransientField(Field field) {
+    return isStaticField(field) == false && isTransientField(field) == false && field.isAnnotationPresent(Transient.class) == false;
   }
 
   public static boolean isFinalField(Field field) {
@@ -434,8 +442,8 @@ public class ReflectionHelper {
     return Modifier.isTransient(field.getModifiers());
   }
 
-  public static boolean isNonFinalNonStaticNonAbstractMethod(Method method) {
-    return isFinalMethod(method) == false && isStaticMethod(method) == false && isAbstractMethod(method) == false && method.isAnnotationPresent(Transient.class) == false;
+  public static boolean isNonStaticNonAbstractMethod(Method method) {
+    return isStaticMethod(method) == false && isAbstractMethod(method) == false && method.isAnnotationPresent(Transient.class) == false;
   }
 
   public static boolean isFinalMethod(Method method) {
