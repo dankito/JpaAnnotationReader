@@ -22,6 +22,8 @@ public class Property {
   protected Method getMethod;
   protected Method setMethod;
 
+  protected boolean hasFinalField = false;
+
   protected Class declaringClass = null;
 
   protected transient Map<Class<? extends Annotation>, AnnotationPlacement> mapFoundAnnotations = new HashMap<>();
@@ -69,6 +71,13 @@ public class Property {
     return setMethod;
   }
 
+  public boolean isHasFinalField() {
+    return hasFinalField;
+  }
+
+  public void setHasFinalField(boolean hasFinalField) {
+    this.hasFinalField = hasFinalField;
+  }
 
   public Class getType() {
     if(field != null)
@@ -182,6 +191,10 @@ public class Property {
   }
 
   public AnnotationPlacement whereIsAnnotationPlaced(Class<? extends Annotation> annotation) {
+    if(hasFinalField) {
+      return AnnotationPlacement.GetMethod;
+    }
+
     return mapFoundAnnotations.get(annotation);
   }
 
