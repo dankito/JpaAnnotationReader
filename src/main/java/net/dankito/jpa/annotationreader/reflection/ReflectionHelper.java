@@ -144,17 +144,7 @@ public class ReflectionHelper {
     Map<String, Method> persistableGetMethods = getEntityGetMethods(entityClass);
 
     for(Field persistableField : persistableFields) {
-      Method getMethod = findGetMethod(persistableField, persistableGetMethods);
-      if(getMethod != null) {
-        persistableGetMethods.remove(getMethod.getName());
-      }
-
-      if(isNonFinalNonStaticNonTransientField(persistableField) && (getMethod == null || isNonFinalNonStaticNonAbstractMethod(getMethod))) {
-        Property property = findPropertyForField(persistableField, getMethod);
-        extractPropertyAnnotations(property);
-        persistableProperties.add(property);
-        foundProperty(entityClass, property.getFieldName(), property);
-      }
+      tryToFindPropertyForField(entityClass, persistableProperties, persistableField, persistableGetMethods);
     }
 
     // TODO: also respect 'get' Methods without a field?
@@ -167,6 +157,20 @@ public class ReflectionHelper {
 
     mapExtractedEntityProperties.put(entityClass, persistableProperties);
     return persistableProperties;
+  }
+
+  private static void tryToFindPropertyForField(Class entityClass, List<Property> persistableProperties, Field persistableField, Map<String, Method> persistableGetMethods) {
+    Method getMethod = findGetMethod(persistableField, persistableGetMethods);
+    if(getMethod != null) {
+      persistableGetMethods.remove(getMethod.getName());
+    }
+
+    if(isNonFinalNonStaticNonTransientField(persistableField) && (getMethod == null || isNonFinalNonStaticNonAbstractMethod(getMethod))) {
+      Property property = findPropertyForField(persistableField, getMethod);
+      extractPropertyAnnotations(property);
+      persistableProperties.add(property);
+      foundProperty(entityClass, property.getFieldName(), property);
+    }
   }
 
 //  /**
