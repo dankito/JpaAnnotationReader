@@ -255,7 +255,7 @@ public class JpaEntityConfigurationReader {
 
   protected void findLifeCycleEvents(Class dataClass, EntityConfig entityConfig) {
     for (Class<?> classWalk = dataClass; classWalk != null; classWalk = classWalk.getSuperclass()) {
-      if(classIsEntityOrMappedSuperclass(dataClass)) {
+      if(classIsEntityOrMappedSuperclass(classWalk)) {
         for (Method method : classWalk.getDeclaredMethods()) {
           checkMethodForLifeCycleEvents(method, entityConfig);
         }
