@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 /**
- * Data type enumeration that corresponds to a {@link DataPersister}.
+ * Data type enumeration that corresponds to a DataPersister.
  *
  * @author graywatson
  */
@@ -22,7 +22,7 @@ public enum DataType {
 	LONG_STRING(String.class),
 	/**
 	 * Persists the {@link String} Java class as an array of bytes. By default this will use {@link #STRING} so you will
-	 * need to specify this using {@link DatabaseField#dataType()}.
+	 * need to specify this using DatabaseField.dataType().
 	 */
 	STRING_BYTES(String.class),
 	/**
@@ -52,7 +52,7 @@ public enum DataType {
 
 	/**
 	 * Persists the {@link Date} Java class as long milliseconds since epoch. By default this will use
-	 * {@link #DATE} so you will need to specify this using {@link DatabaseField#dataType()}.
+	 * {@link #DATE} so you will need to specify this using DatabaseField.dataType().
 	 * 
 	 * <p>
 	 * NOTE: This is <i>not</i> the same as the {@link java.sql.Date} class.
@@ -61,7 +61,7 @@ public enum DataType {
 	DATE_LONG(Date.class),
 	/**
 	 * Persists the {@link Date} Java class as a string of a format. By default this will use {@link #DATE} so
-	 * you will need to specify this using {@link DatabaseField#dataType()}.
+	 * you will need to specify this using DatabaseField.dataType().
 	 * 
 	 * <p>
 	 * NOTE: This is <i>not</i> the same as the {@link java.sql.Date} class.
@@ -87,7 +87,7 @@ public enum DataType {
 	BYTE(byte.class),
 	/**
 	 * Persists the byte[] array type. Because of some backwards compatibility issues, you will need to specify this
-	 * using {@link DatabaseField#dataType()}. It won't be detected automatically.
+	 * using DatabaseField.dataType(). It won't be detected automatically.
 	 */
 	BYTE_ARRAY(byte[].class),
 	/**
@@ -136,7 +136,7 @@ public enum DataType {
 	DOUBLE_OBJ(Double.class),
 	/**
 	 * Persists an unknown Java Object that is serializable. Because of some backwards and forwards compatibility
-	 * concerns, you will need to specify this using {@link DatabaseField#dataType()}. It won't be detected
+	 * concerns, you will need to specify this using DatabaseField.dataType(). It won't be detected
 	 * automatically.
 	 */
 	SERIALIZABLE(Serializable.class),
@@ -167,7 +167,7 @@ public enum DataType {
 	BIG_DECIMAL(BigDecimal.class),
 	/**
 	 * Persists the org.joda.time.DateTime type with reflection since we don't want to add the dependency. Because this
-	 * class uses reflection, you have to specify this using {@link DatabaseField#dataType()}. It won't be detected
+	 * class uses reflection, you have to specify this using DatabaseField.dataType(). It won't be detected
 	 * automatically.
 	 */
 //	DATE_TIME(Class.forName("joda.time.DateTime"), DateTimeType.getSingleton()),

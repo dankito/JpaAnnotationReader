@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,8 +20,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GenerationType;
 
 /**
- * Per field information configured from the {@link com.j256.ormlite.field.DatabaseField} annotation and the associated {@link Field} in the
- * class. Use the {@link #createFieldType} static method to instantiate the class.
  * 
  * @author graywatson
  */

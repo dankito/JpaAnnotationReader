@@ -307,7 +307,7 @@ public class EntityConfig<T, ID> {
 
   /**
    * <p>
-   *   Not such a good design.<br/>
+   *   Not such a good design.<br>
    *   Only needed for Joined inheritance tables as by default all super class fields get added to TableInfo,
    *   but Joined tables only contain columns from their own fields.
    * </p>
@@ -513,7 +513,7 @@ public class EntityConfig<T, ID> {
 
   /**
 	 * Return true if this table information has a field with this columnName as set by
-	 * {@link DatabaseField#columnName()} or the field name if not set.
+	 * DatabaseField.columnName() or the field name if not set.
 	 */
 	public boolean hasColumnName(String columnName) {
     return propertyConfigsColumnNames.containsKey(columnName);
