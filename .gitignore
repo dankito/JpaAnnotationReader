@@ -7,12 +7,9 @@
 /.nb-gradle
 **/build
 /local.properties
+/gradle.properties
 
-/docs
-/data
-/plugins
 /res
-**/DeepThoughtFx.properties
 
 
 # Built application files
