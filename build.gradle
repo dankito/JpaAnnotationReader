@@ -1,7 +1,28 @@
-group 'net.dankito'
+group 'net.dankito.jpa.annotationreader'
 version '1.0-SNAPSHOT'
+def mavenArtifactId = "jpa-annotation-reader"
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        // Nexus staging plugin has to be downgraded to 0.10.0 to be applicable to sub projects, see https://github.com/UweTrottmann/SeriesGuide/commit/ca33e8ad2fa6cc5c426450c8aef3417ba073ca7f
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.10.0"
+    }
+}
+
 
 apply plugin: 'java'
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+// So after executing uploadArchives staged repository can be closed and released by executing RichTextEditorAndroid:closeAndReleaseRepository
+apply plugin: 'io.codearte.nexus-staging'
+
 
 sourceCompatibility = 1.7
 
@@ -12,8 +33,80 @@ repositories {
 dependencies {
     compile 'org.eclipse.persistence:javax.persistence:2.1.0'
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.slf4j:slf4j-api:1.7.25'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'junit:junit:4.12'
     testCompile 'org.easymock:easymock:2.3'
+}
+
+
+
+/*          publish to maven central            */
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name mavenArtifactId
+                artifactId = mavenArtifactId
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description "Reads the JPA (Java Persistence API) annotations of all entities and creates a metamodel from them so that it can be processed by subsequent libraries, e. g. an APT processor, an EntityManager or a JPA provider."
+                url 'https://github.com/dankito/JpaAnnotationReader'
+
+                scm {
+                    connection 'scm:git:git://github.com/dankito/JpaAnnotationReader.git'
+                    developerConnection 'scm:git:git@github.com:dankito/JpaAnnotationReader.git'
+                    url 'https://github.com/dankito/JpaAnnotationReader'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'dankito'
+                        name 'Christian Dankl'
+                        email 'maven@dankito.net'
+                    }
+                }
+            }
+        }
+    }
+}
+
+nexusStaging {
+    packageGroup = "net.dankito"
 }
