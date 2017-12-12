@@ -12,9 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 
-/**
- * Created by ganymed on 01/11/14.
- */
+
 public class ManyToManyConfig extends AssociationConfig {
 
   protected Class owningSideClass;

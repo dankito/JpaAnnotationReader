@@ -10,9 +10,7 @@ import java.util.List;
 
 import javax.persistence.InheritanceType;
 
-/**
- * Created by ganymed on 17/11/14.
- */
+
 public class SingleTableEntityConfig<T, ID> extends InheritanceEntityConfig<T, ID> {
 
   protected List<PropertyConfig> allTableFieldsList = null;

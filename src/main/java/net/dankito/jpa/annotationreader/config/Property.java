@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class Property {
 
   public enum AnnotationPlacement { Field, GetMethod }

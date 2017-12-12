@@ -15,9 +15,7 @@ import java.util.Map;
 
 import javax.persistence.InheritanceType;
 
-/**
- * Created by ganymed on 17/11/14.
- */
+
 public class JoinedEntityConfig<T, ID> extends InheritanceEntityConfig<T, ID> {
 
   private final static Logger log = LoggerFactory.getLogger(JoinedEntityConfig.class);

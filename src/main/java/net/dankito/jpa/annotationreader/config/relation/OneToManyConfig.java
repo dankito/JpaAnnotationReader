@@ -7,9 +7,7 @@ import java.lang.reflect.Field;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 
-/**
- * Created by ganymed on 01/11/14.
- */
+
 public class OneToManyConfig extends AssociationConfig {
 
   protected Class oneSideClass;

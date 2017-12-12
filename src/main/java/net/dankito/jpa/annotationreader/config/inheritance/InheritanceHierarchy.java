@@ -3,9 +3,7 @@ package net.dankito.jpa.annotationreader.config.inheritance;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by ganymed on 16/11/14.
- */
+
 public class InheritanceHierarchy {
 
   protected List<EntityInheritance> inheritanceHierarchy = new LinkedList<>();

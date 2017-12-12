@@ -12,8 +12,6 @@ import java.util.HashMap;
  * Reading Annotation values is very, very slow, especially on Android.
  * But luckily i found these trick from user931366, yanchenko and Gray (programmer of OrmLite) on https://stackoverflow.com/questions/7417426/why-are-annotations-under-android-such-a-performance-issue-slow
  * This speeds up Annotation values reading by a big factor (around 20).
- *
- * Created by ganymed on 26/08/15.
  */
 public class AnnotationElementsReader implements IAnnotationElementsReader {
 

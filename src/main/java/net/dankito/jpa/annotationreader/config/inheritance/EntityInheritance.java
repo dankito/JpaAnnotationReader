@@ -6,9 +6,7 @@ import java.util.List;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.InheritanceType;
 
-/**
- * Created by ganymed on 16/11/14.
- */
+
 public class EntityInheritance {
 
   protected Class entity = null;

@@ -3,9 +3,7 @@ package net.dankito.jpa.annotationreader.config.relation;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 
-/**
- * Created by ganymed on 11/11/14.
- */
+
 public abstract class AssociationConfig {
 
   protected boolean isBidirectional = false;

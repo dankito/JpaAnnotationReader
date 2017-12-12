@@ -18,9 +18,7 @@ import java.util.Map;
 
 import javax.persistence.Transient;
 
-/**
- * Created by ganymed on 05/03/15.
- */
+
 public class ReflectionHelper {
 
   private final static Logger log = LoggerFactory.getLogger(ReflectionHelper.class);

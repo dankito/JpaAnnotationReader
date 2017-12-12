@@ -7,9 +7,7 @@ import net.dankito.jpa.annotationreader.util.ConfigRegistry;
 
 import java.sql.SQLException;
 
-/**
- * Created by ganymed on 15/08/16.
- */
+
 public class JpaAnnotationReader {
 
   public JpaAnnotationReaderResult readConfiguration(Class... entitiesToRead) throws SQLException {

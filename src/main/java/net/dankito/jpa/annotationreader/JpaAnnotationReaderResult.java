@@ -6,9 +6,7 @@ import net.dankito.jpa.annotationreader.config.jointable.JoinTableConfig;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by ganymed on 15/08/16.
- */
+
 public class JpaAnnotationReaderResult {
 
   protected List<EntityConfig> readEntities;

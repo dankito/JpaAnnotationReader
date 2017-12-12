@@ -36,9 +36,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-/**
- * Created by ganymed on 05/03/15.
- */
+
 public class JpaEntityConfigurationReader {
 
   public final static String NotSupportedExceptionTrailMessage = "currently not supported and there are no plans to implement support for it";
@@ -289,7 +287,7 @@ public class JpaEntityConfigurationReader {
   public static String getEntityTableName(Class<?> entityClass, IAnnotationElementsReader annotationElementsReader) throws SQLException {
     if(entityClass.isAnnotationPresent(Table.class)) {
       Table tableAnnotation = entityClass.getAnnotation(Table.class);
-      Map<String, Object> elements = annotationElementsReader.getElements(tableAnnotation);;
+      Map<String, Object> elements = annotationElementsReader.getElements(tableAnnotation);
       String name = (String)elements.get("name");
       if(StringHelper.isNotNullOrEmpty(name)) {
         return name;

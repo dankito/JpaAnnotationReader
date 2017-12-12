@@ -52,9 +52,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-/**
- * Created by ganymed on 05/03/15.
- */
 public class JpaPropertyConfigurationReader {
 
   private final static Logger log = LoggerFactory.getLogger(JpaPropertyConfigurationReader.class);

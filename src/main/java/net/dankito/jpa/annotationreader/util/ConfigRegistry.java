@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by ganymed on 15/08/16.
- */
 public class ConfigRegistry {
 
   protected List<Class> entitiesToRead = new ArrayList<>();

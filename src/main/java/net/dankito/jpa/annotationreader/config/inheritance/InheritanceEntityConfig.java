@@ -15,9 +15,6 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.InheritanceType;
 
-/**
- * Created by ganymed on 17/11/14.
- */
 public abstract class InheritanceEntityConfig<T, ID> extends EntityConfig<T, ID> {
 
   public final static InheritanceType DefaultInheritanceType = InheritanceType.SINGLE_TABLE;

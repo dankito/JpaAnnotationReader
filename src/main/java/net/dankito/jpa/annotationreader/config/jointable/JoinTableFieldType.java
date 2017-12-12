@@ -5,9 +5,7 @@ import net.dankito.jpa.annotationreader.config.relation.ManyToManyConfig;
 
 import java.sql.SQLException;
 
-/**
- * Created by ganymed on 02/11/14.
- */
+
 public class JoinTableFieldType extends PropertyConfig {
 
 
