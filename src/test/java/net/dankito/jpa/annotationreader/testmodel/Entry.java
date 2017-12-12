@@ -17,9 +17,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-/**
- * Created by ganymed on 16/12/14.
- */
+
 @Entity(name = TableConfig.EntryTableName)
 public class Entry extends UserDataEntity implements Serializable, Comparable<Entry> {
 

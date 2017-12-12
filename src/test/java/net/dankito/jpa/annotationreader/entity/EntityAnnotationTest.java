@@ -13,9 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-/**
- * Created by ganymed on 07/03/15.
- */
 public class EntityAnnotationTest extends JpaConfigurationReaderTestBase {
 
   private final static String TestEntityName = "test_entity";

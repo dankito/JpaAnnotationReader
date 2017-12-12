@@ -12,9 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class ColumnAnnotationTest extends JpaConfigurationReaderTestBase {
 
   private final static String TestColumnName = "last_name";

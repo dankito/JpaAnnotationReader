@@ -6,9 +6,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class JpaConfigurationReaderTestBase {
 
   protected JpaEntityConfigurationReader entityConfigurationReader = null;

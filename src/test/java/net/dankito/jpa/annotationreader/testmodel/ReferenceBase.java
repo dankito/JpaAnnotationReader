@@ -8,9 +8,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-/**
- * Created by ganymed on 21/01/15.
- */
+
 //@MappedSuperclass
 @Entity
 @Table(name = TableConfig.ReferenceBaseTableName)

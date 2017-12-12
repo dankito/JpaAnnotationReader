@@ -16,9 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-/**
- * Created by ganymed on 16/12/14.
- */
+
 @Entity(name = TableConfig.SeriesTitleTableName)
 @DiscriminatorValue(TableConfig.SeriesTitleDiscriminatorValue)
 public class SeriesTitle extends ReferenceBase implements Serializable, Comparable<SeriesTitle> {

@@ -15,9 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class ManyToManyAnnotationTest extends JpaConfigurationReaderTestBase {
 
   @Entity

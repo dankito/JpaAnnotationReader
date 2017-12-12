@@ -6,9 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-/**
- * Created by ganymed on 09/12/14.
- */
+
 @Entity(name = TableConfig.UserTableName)
 //@DiscriminatorValue("USER")
 public class User extends BaseEntity implements Serializable {

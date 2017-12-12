@@ -17,9 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-/**
- * Created by ganymed on 21/01/15.
- */
+
 @Entity(name = TableConfig.ReferenceTableName)
 @DiscriminatorValue(TableConfig.ReferenceDiscriminatorValue)
 public class Reference extends ReferenceBase implements Comparable<Reference> {

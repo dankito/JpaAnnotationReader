@@ -16,9 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class TemporalAnnotationTest extends JpaConfigurationReaderTestBase {
 
   @Entity

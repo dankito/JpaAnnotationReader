@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-/**
- * Created by ganymed on 13/12/14.
- */
+
 public class TableConfig {
 
 

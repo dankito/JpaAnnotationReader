@@ -14,9 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
-/**
- * Created by ganymed on 10/11/14.
- */
+
 @Entity(name = TableConfig.CategoryTableName)
 public class Category extends UserDataEntity {
 

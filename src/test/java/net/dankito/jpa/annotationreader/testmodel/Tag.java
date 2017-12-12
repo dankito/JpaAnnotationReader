@@ -13,9 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
-/**
- * Created by ganymed on 12/10/14.
- */
 @Entity(name = TableConfig.TagTableName)
 public class Tag extends UserDataEntity implements Comparable<Tag>, Serializable {
 

@@ -1,6 +1,5 @@
 package net.dankito.jpa.annotationreader.entity;
 
-
 import net.dankito.jpa.annotationreader.config.EntityConfig;
 import net.dankito.jpa.annotationreader.JpaConfigurationReaderTestBase;
 
@@ -14,9 +13,7 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class AccessAnnotationTest extends JpaConfigurationReaderTestBase {
 
 

@@ -14,9 +14,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class EnumeratedAnnotationTest extends JpaConfigurationReaderTestBase {
 
   public enum TestEnum { One, Two }

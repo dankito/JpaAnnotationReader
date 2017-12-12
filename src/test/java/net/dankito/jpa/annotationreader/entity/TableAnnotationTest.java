@@ -15,9 +15,6 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-/**
- * Created by ganymed on 07/03/15.
- */
 public class TableAnnotationTest extends JpaConfigurationReaderTestBase {
 
   private final static String TestEntityName = "test_entity";

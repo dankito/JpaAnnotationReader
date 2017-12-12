@@ -19,9 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class ManyToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
   private final static String TestJoinColumnName = "inverse_side";

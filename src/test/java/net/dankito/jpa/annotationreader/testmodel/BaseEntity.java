@@ -19,9 +19,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-/**
- * Created by ganymed on 12/10/14.
- */
+
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 

@@ -15,9 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 
-/**
- * Created by ganymed on 10/03/15.
- */
+
 public class DiscriminatorValueAnnotationTest extends JpaConfigurationReaderTestBase {
 
 

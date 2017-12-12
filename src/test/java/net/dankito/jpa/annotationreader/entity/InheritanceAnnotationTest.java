@@ -14,9 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-/**
- * Created by ganymed on 10/03/15.
- */
+
 public class InheritanceAnnotationTest extends JpaConfigurationReaderTestBase {
 
 

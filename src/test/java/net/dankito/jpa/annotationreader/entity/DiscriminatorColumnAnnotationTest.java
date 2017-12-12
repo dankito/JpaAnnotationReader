@@ -15,9 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-/**
- * Created by ganymed on 10/03/15.
- */
+
 public class DiscriminatorColumnAnnotationTest extends JpaConfigurationReaderTestBase {
 
   private final static String TestDiscriminatorColumnName = "DISCRIM";

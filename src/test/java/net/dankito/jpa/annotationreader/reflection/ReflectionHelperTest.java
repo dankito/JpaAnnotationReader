@@ -11,9 +11,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-/**
- * Created by ganymed on 10/03/15.
- */
+
 public class ReflectionHelperTest {
 
   @Test

@@ -17,9 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class OrderByAnnotationTest extends JpaConfigurationReaderTestBase {
 
   @Entity

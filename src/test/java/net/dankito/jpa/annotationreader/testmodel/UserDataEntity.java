@@ -5,9 +5,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 
-/**
- * Created by ganymed on 09/12/14.
- */
+
 @MappedSuperclass
 public class UserDataEntity extends BaseEntity {
 

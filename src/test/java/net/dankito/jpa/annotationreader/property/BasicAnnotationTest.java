@@ -13,9 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class BasicAnnotationTest extends JpaConfigurationReaderTestBase {
 
 

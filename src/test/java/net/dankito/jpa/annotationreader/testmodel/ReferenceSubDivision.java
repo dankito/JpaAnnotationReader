@@ -13,9 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
-/**
- * Created by ganymed on 21/01/15.
- */
+
 @Entity(name = TableConfig.ReferenceSubDivisionTableName)
 @DiscriminatorValue(TableConfig.ReferenceSubDivisionDiscriminatorValue)
 public class ReferenceSubDivision extends ReferenceBase implements Comparable<ReferenceSubDivision> {

@@ -17,9 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class OneToOneAnnotationTest extends JpaConfigurationReaderTestBase {
 
   private final static String TestJoinColumnName = "inverse_side";

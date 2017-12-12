@@ -15,9 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.TableGenerator;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class IdAnnotationTest extends JpaConfigurationReaderTestBase {
 
 

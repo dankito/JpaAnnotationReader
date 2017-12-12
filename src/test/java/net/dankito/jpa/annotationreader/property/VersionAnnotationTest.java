@@ -12,9 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class VersionAnnotationTest extends JpaConfigurationReaderTestBase {
 
   @Entity

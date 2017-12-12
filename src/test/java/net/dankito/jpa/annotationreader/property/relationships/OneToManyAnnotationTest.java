@@ -17,9 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-/**
- * Created by ganymed on 07/03/15.
- */
+
 public class OneToManyAnnotationTest extends JpaConfigurationReaderTestBase {
 
   static class OneSideUnAnnotatedHolder {
